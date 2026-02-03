@@ -1,0 +1,21 @@
+.gradle/
+frontend/.gradle/
+backend/src/main/resources/static/*
+.idea/
+build/
+out/
+!backend/gradle/wrapper/gradle-wrapper.jar
+.DS_Store
+.envrc
+node_modules
+yarn-error.log
+.vscode
+/docker/keycloak/*
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# Ignore Kotlin plugin data
+.kotlin
