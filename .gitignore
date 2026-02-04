@@ -1,21 +1,20 @@
-.gradle/
-frontend/.gradle/
-backend/src/main/resources/static/*
-.idea/
-build/
-out/
-!backend/gradle/wrapper/gradle-wrapper.jar
+# Dependencies
+**/node_modules/
+**/dist/
+**/build/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker
+.dockerignore
+*.log
+
+# IDE / System files
 .DS_Store
-.envrc
-node_modules
-yarn-error.log
-.vscode
-/docker/keycloak/*
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
-
-# Ignore Kotlin plugin data
-.kotlin
+.vscode/
+.idea/
