@@ -4,7 +4,7 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: my_db
+      MYSQL_DATABASE: better_timer_db
       MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
@@ -12,6 +12,7 @@ services:
   backend:
     container_name: better_timer_backend
     build: ./backend
+    restart: on-failure
     ports:
       - "5001:5000"
     environment:
@@ -20,11 +21,3 @@ services:
       DB_PASSWORD: password
     depends_on:
       - db
-
-  frontend:
-    container_name: better_timer_ui
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
