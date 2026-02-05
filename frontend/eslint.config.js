@@ -36,7 +36,8 @@ export default tseslint.config(
           singleQuote: true,
           jsxSingleQuote: true, // Optional: applies to JSX attributes too
           semi: true,           // Keep semicolons
-          trailingComma: 'es5'  // Standard ES5 trailing commas
+          trailingComma: 'es5',  // Standard ES5 trailing commas
+          printWidth: 100
         },
       ],
     },
