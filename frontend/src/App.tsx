@@ -2,12 +2,21 @@ import { useState } from 'react'
 import React from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import TimerIcon from '@mui/icons-material/Timer';
+import GlobalHeader from './components/GlobalHeader';
 
 const App: React.FC = () => {
   const [count, setCount] = useState(0)
 
   return (
-      <Container maxWidth="sm">
+      <Container
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh', // Stretch to at least full screen height
+            width: '100vw',     // Stretch to full screen width
+            bgcolor: 'background.default' // Uses your theme's background color
+        }}>
+      <GlobalHeader />
         <Box
           sx={{
             marginTop: 8,
