@@ -6,14 +6,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 const GlobalHeader: React.FC = () => {
   return (
-    <AppBar position="static" color="default" elevation={1}>
+    <AppBar position='static' color='default' elevation={1}>
       <Toolbar>
         {/* Logo Section */}
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
           <TimerIcon sx={{ mr: 1, color: 'primary.main' }} />
           <Typography
-            variant="h6"
-            component="div"
+            variant='h6'
+            component='div'
             sx={{ fontWeight: 'bold', letterSpacing: 1 }}
           >
             BETTER TIMER
@@ -21,17 +21,11 @@ const GlobalHeader: React.FC = () => {
         </Box>
 
         {/* Navigation Actions */}
-        <Stack direction="row" spacing={1}>
-          <Button
-            startIcon={<HistoryIcon />}
-            color="inherit"
-          >
+        <Stack direction='row' spacing={1}>
+          <Button startIcon={<HistoryIcon />} color='inherit'>
             History
           </Button>
-          <Button
-            startIcon={<SettingsIcon />}
-            color="inherit"
-          >
+          <Button startIcon={<SettingsIcon />} color='inherit'>
             Settings
           </Button>
         </Stack>
