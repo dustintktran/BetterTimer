@@ -3,8 +3,8 @@ import { AppBar, Toolbar, Typography, Button, Stack, Box } from '@mui/material';
 import TimerIcon from '@mui/icons-material/Timer';
 import HistoryIcon from '@mui/icons-material/History';
 import { Add } from '@mui/icons-material';
-import { TIMER_PAGE_VIEW, type TimerPageView } from '../constants';
-import { TitleHeader } from '../styles/styles';
+import { TIMER_PAGE_VIEW, type TimerPageView } from '../../constants';
+import { TitleHeader } from '../../styles/styles';
 
 interface GlobalHeaderProps {
   setCurrentView: React.Dispatch<React.SetStateAction<TimerPageView>>;
@@ -19,7 +19,6 @@ const GlobalHeader = ({ setCurrentView }: GlobalHeaderProps) => {
           <TitleHeader>Better Timer</TitleHeader>
         </Box>
 
-        {/* Navigation Actions */}
         <Stack direction='row' spacing={1}>
           <Button
             startIcon={<HistoryIcon />}

@@ -1,12 +1,34 @@
-import { Box } from '@mui/material';
-import { Typography } from '@mui/material';
+import { Stack, Box } from '@mui/material';
 const ActiveTimer: React.FC = () => {
   return (
-    <Box>
-      <Typography variant='h4' component='h1' gutterBottom>
-        Active Timer
-      </Typography>
-    </Box>
+    <Stack direction='row' sx={{ height: '100%' }}>
+      <Stack direction='column' flex={2} sx={{ height: '100%' }}>
+        <Box
+          flex={2}
+          sx={{
+            border: '1px solid black',
+          }}
+        >
+          Box1
+        </Box>
+        <Box
+          flex={1}
+          sx={{
+            border: '1px solid black',
+          }}
+        >
+          Box2
+        </Box>
+      </Stack>
+      <Box
+        flex={1}
+        sx={{
+          border: '1px solid black',
+        }}
+      >
+        Box3
+      </Box>
+    </Stack>
   );
 };
 
