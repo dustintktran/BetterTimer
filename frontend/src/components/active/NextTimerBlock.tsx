@@ -1,6 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { type Timer } from '../../constants';
+import { TIMER_BLOCK_TYPE, type Timer } from '../../constants';
+import StaticClock from './StaticClock';
 
 interface NextTimerBlockProps {
   timer: Timer;
@@ -8,9 +9,10 @@ interface NextTimerBlockProps {
 
 export const NextTimerBlock = ({ timer }: NextTimerBlockProps) => {
   return (
-    <Stack sx={styles.container} flex={2}>
-      <Typography>{timer.name}</Typography>
-      <Typography>{timer.duration}</Typography>
+    <Stack flex={2}>
+      <Typography margin={2}>Up Next: </Typography>
+      <Typography sx={styles.nextClockHeader}>{timer.name}</Typography>
+      <StaticClock type={TIMER_BLOCK_TYPE.NEXT} seconds={timer.duration} />
     </Stack>
   );
 };
@@ -18,24 +20,10 @@ export const NextTimerBlock = ({ timer }: NextTimerBlockProps) => {
 export default NextTimerBlock;
 
 const styles = {
-  currentClockHeader: (theme: Theme) => ({
-    fontSize: '22px',
+  nextClockHeader: (theme: Theme) => ({
+    fontSize: '32px',
     fontWeight: 'bold',
     marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(1),
-  }),
-  currentClockDuration: {
-    fontSize: '80px',
-    fontWeight: 'bold',
     textAlign: 'center',
-  },
-  currentClockSkip: (theme: Theme) => ({
-    alignSelf: 'flex-end',
-    margin: theme.spacing(2),
-  }),
-  container: (theme: Theme) => ({
-    margin: theme.spacing(0.5),
-    border: '1px solid black',
-    borderRadius: '2px',
   }),
 };

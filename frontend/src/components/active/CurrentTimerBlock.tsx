@@ -1,48 +1,64 @@
-import { Stack, Typography, Button } from '@mui/material';
+import { Box, Stack, Typography, Button } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
 import { type Timer } from '../../constants';
 import CurrentClock from './CurrentClock';
+import beep from '../../assets/beep1.mp3';
+import useSound from 'use-sound';
 
-interface CurrentTimerBlock {
+interface CurrentTimerBlockProps {
   timer: Timer;
   setTimers: React.Dispatch<React.SetStateAction<Timer[]>>;
+  isPaused: boolean;
 }
 
-export const TimerBlock = ({ timer, setTimers }: CurrentTimerBlock) => {
+export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBlockProps) => {
   const timerComplete = timer == undefined;
-  const handleSkipTimer = () => {
+  const [playBeep] = useSound(beep);
+  const handleNextTimer = () => {
     setTimers((previousTimers) => previousTimers.slice(1));
+    playBeep();
   };
   return (
-    <>
+    <Box sx={styles.container}>
       {timerComplete ? (
-        <Typography sx={styles.container}>Timers Complete!</Typography>
+        <Typography>Timers Complete!</Typography>
       ) : (
-        <Stack sx={styles.container} flex={5}>
+        <Stack flex={5}>
           <Typography sx={styles.currentClockHeader}>{timer.name}</Typography>
-          <CurrentClock initialSeconds={timer.duration} />
+          <CurrentClock
+            key={`{isPaused}`}
+            initialSeconds={timer.duration}
+            handleNextTimer={handleNextTimer}
+            isPaused={isPaused}
+          />
           <Button
             variant='outlined'
             sx={styles.currentClockSkip}
             color='warning'
-            onClick={handleSkipTimer}
+            onClick={handleNextTimer}
           >
             Skip
           </Button>
         </Stack>
       )}
-    </>
+    </Box>
   );
 };
 
-export default TimerBlock;
+export default CurrentTimerBlock;
 
 const styles = {
+  container: (theme: Theme) => ({
+    marginTop: theme.spacing(1),
+    border: '1px solid black',
+    borderRadius: theme.spacing(2),
+  }),
   currentClockHeader: (theme: Theme) => ({
-    fontSize: '22px',
+    fontSize: '42px',
     fontWeight: 'bold',
     marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(10),
+    textAlign: 'center',
   }),
   currentClockDuration: {
     fontSize: '80px',
@@ -52,10 +68,5 @@ const styles = {
   currentClockSkip: (theme: Theme) => ({
     alignSelf: 'flex-end',
     margin: theme.spacing(2),
-  }),
-  container: (theme: Theme) => ({
-    margin: theme.spacing(0.5),
-    border: '1px solid black',
-    borderRadius: '2px',
   }),
 };

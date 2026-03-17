@@ -25,5 +25,7 @@ const styles = {
     height: '100vh',
     marginLeft: '4px',
   },
-  containerStack: { flexGrow: 1, height: 'calc(100% - 4px)' },
+  containerStack: {
+    height: 'calc(100% - 4px)',
+  },
 };

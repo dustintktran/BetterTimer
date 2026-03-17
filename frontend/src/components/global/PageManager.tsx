@@ -9,14 +9,7 @@ interface PageManagerProps {
 
 const PageManager = ({ currentView }: PageManagerProps) => {
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '100%',
-        borderRadius: '2px',
-        boxShadow: 2,
-      }}
-    >
+    <Box sx={styles.pageManager}>
       {currentView === TIMER_PAGE_VIEW.CREATE && <CreateTimer />}
       {currentView === TIMER_PAGE_VIEW.ACTIVE && <ActiveTimer />}
     </Box>
@@ -24,3 +17,15 @@ const PageManager = ({ currentView }: PageManagerProps) => {
 };
 
 export default PageManager;
+
+const styles = {
+  pageManager: {
+    width: '100%',
+    height: '100%',
+    borderRadius: '2px',
+    boxShadow: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+  },
+};

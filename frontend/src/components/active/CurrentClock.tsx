@@ -4,20 +4,22 @@ import { formatTime } from '../../helpers/formatTime';
 
 interface CurrentClockProps {
   initialSeconds: number;
+  handleNextTimer: () => void;
+  isPaused: boolean;
 }
 
-const CurrentClock = ({ initialSeconds }: CurrentClockProps) => {
+const CurrentClock = ({ initialSeconds, handleNextTimer, isPaused }: CurrentClockProps) => {
   const [seconds, setSeconds] = useState(initialSeconds);
 
   useEffect(() => {
-    if (seconds <= 0) return;
+    if (seconds <= 0) handleNextTimer();
 
     const timer = setInterval(() => {
-      setSeconds((prev) => prev - 1);
+      if (!isPaused) setSeconds((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [seconds]);
+  }, [seconds, isPaused]);
 
   const progress = (seconds / initialSeconds) * 100;
 

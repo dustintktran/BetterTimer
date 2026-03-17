@@ -8,7 +8,7 @@ export type TimerPageView = (typeof TIMER_PAGE_VIEW)[keyof typeof TIMER_PAGE_VIE
 export const TIMER_BLOCK_TYPE = {
   CURRENT: 'CURRENT',
   NEXT: 'NEXT',
-  LIST: 'LIST',
+  UPCOMING: 'UPCOMING',
 } as const;
 
 export type TimerBlockType = (typeof TIMER_BLOCK_TYPE)[keyof typeof TIMER_BLOCK_TYPE];
