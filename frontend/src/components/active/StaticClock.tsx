@@ -41,15 +41,17 @@ const styles = {
     margin: 0,
     padding: 0,
   },
-  nextClock: {
+  nextClock: (theme: Theme) => ({
     fontSize: '60px',
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  upcomingClock: {
+    color: theme.palette.secondary.main,
+  }),
+  upcomingClock: (theme: Theme) => ({
     fontSize: '40px',
     textAlign: 'center',
     padding: 0,
     margin: 0,
-  },
+    color: theme.palette.secondary.main,
+  }),
 };

@@ -77,13 +77,11 @@ const styles = {
     alignItems: 'center',
   }),
   pauseButton: {
-    py: 12,
-    px: 32,
+    paddingY: 12,
+    paddingX: 32,
     fontSize: '2.5rem',
     fontWeight: 'bold',
-
     borderRadius: '32px',
-
     transition: 'transform 0.2s ease-in-out',
     '&:active': {
       transform: 'scale(0.95)',

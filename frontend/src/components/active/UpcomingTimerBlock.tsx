@@ -22,9 +22,10 @@ const styles = {
   container: (theme: Theme) => ({
     border: '1px solid black',
     borderRadius: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    marginX: theme.spacing(2),
+    marginTop: theme.spacing(4),
+    marginX: theme.spacing(4),
     boxShadow: 2,
+    background: theme.palette.background.highlight,
   }),
   upcomingClockHeader: (theme: Theme) => ({
     fontSize: '22px',
@@ -32,5 +33,6 @@ const styles = {
     marginTop: theme.spacing(1),
     textAlign: 'center',
     padding: 0,
+    color: theme.palette.text.primary,
   }),
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Stack, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Stack, Box, type Theme } from '@mui/material';
 import TimerIcon from '@mui/icons-material/Timer';
 import HistoryIcon from '@mui/icons-material/History';
 import { Add } from '@mui/icons-material';
@@ -12,10 +12,10 @@ interface GlobalHeaderProps {
 
 const GlobalHeader = ({ setCurrentView }: GlobalHeaderProps) => {
   return (
-    <AppBar position='static' color='default' elevation={1}>
+    <AppBar position='static' color='default' elevation={1} sx={styles.wrapper}>
       <Toolbar>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <TimerIcon sx={{ mr: 1, fontSize: '40px', color: 'primary.main' }} />
+        <Box sx={styles.container}>
+          <TimerIcon sx={styles.timerIcon} />
           <TitleHeader>Better Timer</TitleHeader>
         </Box>
 
@@ -47,3 +47,19 @@ const GlobalHeader = ({ setCurrentView }: GlobalHeaderProps) => {
 };
 
 export default GlobalHeader;
+
+const styles = {
+  wrapper: (theme: Theme) => ({
+    background: theme.palette.header.bg,
+  }),
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    flexGrow: 1,
+  },
+  timerIcon: (theme: Theme) => ({
+    mr: 1,
+    fontSize: '40px',
+    color: theme.palette.primary.main,
+  }),
+};

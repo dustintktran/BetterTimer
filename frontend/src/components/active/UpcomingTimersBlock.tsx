@@ -9,7 +9,7 @@ interface UpcomingTimersBlock {
 export const UpcomingTimersBlock = ({ timers }: UpcomingTimersBlock) => {
   return (
     <Stack flex={2} sx={styles.container}>
-      <Typography margin={2}>Upcoming Timers</Typography>
+      <Typography sx={styles.header}>Upcoming Timers</Typography>
       {timers.map((timer: Timer) => (
         <UpcomingTimerBlock timer={timer} />
       ))}
@@ -26,5 +26,20 @@ const styles = {
     border: '1px solid black',
     marginY: theme.spacing(4),
     marginRight: theme.spacing(4),
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
   }),
+  header: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1, // Keeps it above the scrolling items
+    bgcolor: 'background.paper',
+    paddingLeft: 4,
+    paddingY: 2,
+    borderBottom: '1px solid black', // Optional: visual separator
+    fontWeight: 'bold',
+  },
 };

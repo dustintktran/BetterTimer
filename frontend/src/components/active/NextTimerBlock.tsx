@@ -25,11 +25,13 @@ const styles = {
     marginX: theme.spacing(4),
     border: '1px solid black',
     borderRadius: theme.spacing(2),
+    background: theme.palette.background.default,
   }),
   nextClockHeader: (theme: Theme) => ({
     fontSize: '32px',
     fontWeight: 'bold',
     marginLeft: theme.spacing(2),
     textAlign: 'center',
+    color: theme.palette.text.primary,
   }),
 };

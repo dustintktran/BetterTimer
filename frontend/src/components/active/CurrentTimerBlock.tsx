@@ -19,7 +19,7 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
     playBeep();
   };
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles.block}>
       {timerComplete ? (
         <Typography margin={2}>Timers Complete!</Typography>
       ) : (
@@ -48,11 +48,12 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
 export default CurrentTimerBlock;
 
 const styles = {
-  container: (theme: Theme) => ({
+  block: (theme: Theme) => ({
     marginTop: theme.spacing(4),
     marginX: theme.spacing(4),
     border: '1px solid black',
     borderRadius: theme.spacing(2),
+    background: theme.palette.background.muted,
   }),
   currentClockHeader: (theme: Theme) => ({
     fontSize: '42px',
@@ -60,6 +61,7 @@ const styles = {
     marginLeft: theme.spacing(1),
     marginTop: theme.spacing(10),
     textAlign: 'center',
+    color: theme.palette.text.primary,
   }),
   currentClockDuration: {
     fontSize: '80px',
@@ -72,5 +74,8 @@ const styles = {
     py: 3,
     px: 8,
     fontSize: '1rem',
+    color: theme.palette.warning.contrastText,
+    borderColor: theme.palette.warning.contrastText,
+    background: theme.palette.warning.light,
   }),
 };
