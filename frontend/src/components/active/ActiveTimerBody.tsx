@@ -1,7 +1,7 @@
-import { Stack, Box, Button } from '@mui/material';
+import { Stack, Box, Button, type Theme } from '@mui/material';
 import NextTimerBlock from './NextTimerBlock';
 import { type Timer } from '../../constants';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { UpcomingTimersBlock } from './UpcomingTimersBlock';
 import CurrentTimerBlock from './CurrentTimerBlock';
 
@@ -15,13 +15,32 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
 
   const nextTimerExists = timers.length > 1;
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     setIsPaused(!isPaused);
-  };
+  }, [isPaused]);
+
+  useEffect(() => {
+    const handleSpacebar = (event: KeyboardEvent) => {
+      const isTyping =
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement;
+
+      if (event.code === 'Space' && !isTyping) {
+        event.preventDefault();
+        handlePause();
+      }
+    };
+
+    window.addEventListener('keydown', handleSpacebar);
+
+    return () => {
+      window.removeEventListener('keydown', handleSpacebar);
+    };
+  }, [handlePause]);
 
   return (
     <Stack direction='row' flex={20} sx={{ minHeight: 0 }}>
-      <Stack direction='column' flex={2}>
+      <Stack direction='column' flex={5}>
         <Stack flex={2}>
           <CurrentTimerBlock
             key={`${timers.length}`}
@@ -29,13 +48,16 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
             setTimers={setTimers}
             isPaused={isPaused}
           />
-          <Box flex={3} sx={styles.debug}>
-            {nextTimerExists && <NextTimerBlock timer={timers[1]} />}
-          </Box>
+          {nextTimerExists && <NextTimerBlock timer={timers[1]} />}
         </Stack>
-        <Box flex={1} sx={styles.debug} marginBottom={1}>
-          <Button variant='outlined' onClick={handlePause}>
-            {isPaused ? 'RESUME' : 'PAUSE'}
+        <Box flex={1} sx={styles.actionsContainer} marginBottom={2}>
+          <Button
+            variant='contained'
+            sx={styles.pauseButton}
+            onClick={handlePause}
+            color={isPaused ? 'primary' : 'error'}
+          >
+            {isPaused ? 'START' : 'PAUSE'}
           </Button>
         </Box>
       </Stack>
@@ -47,8 +69,30 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
 export default ActiveTimerBody;
 
 const styles = {
-  debug: {
+  container: (theme: Theme) => ({
     border: '1px solid black',
-    marginTop: '4px',
+    marginTop: theme.spacing(2),
+    marginX: theme.spacing(2),
+  }),
+  actionsContainer: (theme: Theme) => ({
+    marginTop: theme.spacing(2),
+    marginX: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  pauseButton: {
+    py: 12,
+    px: 32,
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+
+    borderRadius: '32px',
+
+    transition: 'transform 0.2s ease-in-out',
+    '&:active': {
+      transform: 'scale(0.95)',
+    },
+    minWidth: '240px',
   },
 };

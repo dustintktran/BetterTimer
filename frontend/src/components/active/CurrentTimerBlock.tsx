@@ -21,7 +21,7 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
   return (
     <Box sx={styles.container}>
       {timerComplete ? (
-        <Typography>Timers Complete!</Typography>
+        <Typography margin={2}>Timers Complete!</Typography>
       ) : (
         <Stack flex={5}>
           <Typography sx={styles.currentClockHeader}>{timer.name}</Typography>
@@ -49,7 +49,8 @@ export default CurrentTimerBlock;
 
 const styles = {
   container: (theme: Theme) => ({
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
+    marginX: theme.spacing(2),
     border: '1px solid black',
     borderRadius: theme.spacing(2),
   }),
@@ -68,5 +69,8 @@ const styles = {
   currentClockSkip: (theme: Theme) => ({
     alignSelf: 'flex-end',
     margin: theme.spacing(2),
+    py: 3,
+    px: 8,
+    fontSize: '1rem',
   }),
 };

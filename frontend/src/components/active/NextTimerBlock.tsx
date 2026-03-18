@@ -9,7 +9,7 @@ interface NextTimerBlockProps {
 
 export const NextTimerBlock = ({ timer }: NextTimerBlockProps) => {
   return (
-    <Stack flex={2}>
+    <Stack flex={2} sx={styles.container}>
       <Typography margin={2}>Up Next: </Typography>
       <Typography sx={styles.nextClockHeader}>{timer.name}</Typography>
       <StaticClock type={TIMER_BLOCK_TYPE.NEXT} seconds={timer.duration} />
@@ -20,10 +20,16 @@ export const NextTimerBlock = ({ timer }: NextTimerBlockProps) => {
 export default NextTimerBlock;
 
 const styles = {
+  container: (theme: Theme) => ({
+    marginTop: theme.spacing(2),
+    marginX: theme.spacing(2),
+    border: '1px solid black',
+    borderRadius: theme.spacing(2),
+  }),
   nextClockHeader: (theme: Theme) => ({
     fontSize: '32px',
     fontWeight: 'bold',
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(2),
     textAlign: 'center',
   }),
 };
