@@ -21,8 +21,8 @@ export default NextTimerBlock;
 
 const styles = {
   container: (theme: Theme) => ({
-    marginTop: theme.spacing(2),
-    marginX: theme.spacing(2),
+    marginTop: theme.spacing(4),
+    marginX: theme.spacing(4),
     border: '1px solid black',
     borderRadius: theme.spacing(2),
   }),

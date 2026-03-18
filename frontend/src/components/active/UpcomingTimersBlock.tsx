@@ -24,7 +24,7 @@ const styles = {
     minHeight: 0,
     overflow: 'auto',
     border: '1px solid black',
-    marginY: theme.spacing(2),
-    marginRight: theme.spacing,
+    marginY: theme.spacing(4),
+    marginRight: theme.spacing(4),
   }),
 };

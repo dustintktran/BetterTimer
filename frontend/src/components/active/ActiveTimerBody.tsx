@@ -69,11 +69,6 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
 export default ActiveTimerBody;
 
 const styles = {
-  container: (theme: Theme) => ({
-    border: '1px solid black',
-    marginTop: theme.spacing(2),
-    marginX: theme.spacing(2),
-  }),
   actionsContainer: (theme: Theme) => ({
     marginTop: theme.spacing(2),
     marginX: theme.spacing(2),
