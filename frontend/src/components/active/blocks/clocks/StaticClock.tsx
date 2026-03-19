@@ -13,6 +13,7 @@ const StaticClock = ({ type, seconds }: StaticClockProps) => {
       sx={
         type === TIMER_BLOCK_TYPE.NEXT ? styles.nextClockContainer : styles.upcomingClockContainer
       }
+      data-testid={`STATIC_CLOCK_${type}`}
     >
       <Stack spacing={2}>
         <Box>
