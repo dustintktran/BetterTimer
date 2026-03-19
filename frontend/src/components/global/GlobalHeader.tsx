@@ -1,16 +1,19 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Stack, Box, type Theme } from '@mui/material';
 import TimerIcon from '@mui/icons-material/Timer';
-import HistoryIcon from '@mui/icons-material/History';
 import { Add } from '@mui/icons-material';
 import { TIMER_PAGE_VIEW, type TimerPageView } from '../../constants';
 import { TitleHeader } from '../../styles/styles';
+import ThemeSelector from './ThemeSelector';
+import TimerSelector from './TimerSelector';
 
 interface GlobalHeaderProps {
   setCurrentView: React.Dispatch<React.SetStateAction<TimerPageView>>;
+  setActiveTheme: React.Dispatch<React.SetStateAction<string>>;
+  setActiveTimer: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const GlobalHeader = ({ setCurrentView }: GlobalHeaderProps) => {
+const GlobalHeader = ({ setCurrentView, setActiveTheme, setActiveTimer }: GlobalHeaderProps) => {
   return (
     <AppBar position='static' color='default' elevation={1} sx={styles.wrapper}>
       <Toolbar>
@@ -19,17 +22,9 @@ const GlobalHeader = ({ setCurrentView }: GlobalHeaderProps) => {
           <TitleHeader>Better Timer</TitleHeader>
         </Box>
 
-        <Stack direction='row' spacing={1}>
-          <Button
-            startIcon={<HistoryIcon />}
-            color='inherit'
-            variant='outlined'
-            onClick={() => setCurrentView(TIMER_PAGE_VIEW.ACTIVE)}
-          >
-            <Typography fontSize={14} marginTop={'2px'}>
-              Select Timer
-            </Typography>
-          </Button>
+        <Stack direction='row' spacing={8}>
+          <ThemeSelector setActiveTheme={setActiveTheme} />
+          <TimerSelector setCurrentView={setCurrentView} setActiveTimer={setActiveTimer} />
           <Button
             startIcon={<Add />}
             color='inherit'

@@ -17,3 +17,7 @@ export type Timer = {
   name: string;
   duration: number;
 };
+
+export type TimersMap = {
+  [key: string]: Timer[];
+};

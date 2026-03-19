@@ -1,18 +1,23 @@
 import { Stack } from '@mui/material';
 import ActiveTimerHeader from './ActiveTimerHeader';
 import ActiveTimerBody from './ActiveTimerBody';
-const ActiveTimer: React.FC = () => {
+import type { Timer, TimersMap } from '../../constants';
+
+interface ActiveTimerProps {
+  activeTimer: string | undefined;
+}
+const ActiveTimer = ({ activeTimer = 'lower1' }: ActiveTimerProps) => {
   return (
     <Stack direction='column' sx={{ height: '100%', minHeight: 0 }}>
       <ActiveTimerHeader headerText='New Timer 1' />
-      <ActiveTimerBody initialTimers={lowerbodyStretches1} />
+      <ActiveTimerBody key={`${activeTimer}`} initialTimers={timersMap[activeTimer]} />
     </Stack>
   );
 };
 
 export default ActiveTimer;
 
-const lowerbodyStretches1 = [
+const lowerbodyStretches1: Timer[] = [
   {
     name: 'Split Stretch',
     duration: 120,
@@ -58,3 +63,19 @@ const lowerbodyStretches1 = [
     duration: 65,
   },
 ];
+
+const upperBodyStretches: Timer[] = [
+  {
+    name: 'Chest Stretch Left',
+    duration: 65,
+  },
+  {
+    name: 'Chest Stretch Right',
+    duration: 65,
+  },
+];
+
+const timersMap: TimersMap = {
+  lower1: lowerbodyStretches1,
+  upper1: upperBodyStretches,
+};

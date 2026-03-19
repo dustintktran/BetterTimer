@@ -5,13 +5,14 @@ import ActiveTimer from '../active/ActiveTimer';
 
 interface PageManagerProps {
   currentView: TimerPageView;
+  activeTimer: string | undefined;
 }
 
-const PageManager = ({ currentView }: PageManagerProps) => {
+const PageManager = ({ currentView, activeTimer }: PageManagerProps) => {
   return (
     <Box sx={styles.pageManager}>
       {currentView === TIMER_PAGE_VIEW.CREATE && <CreateTimer />}
-      {currentView === TIMER_PAGE_VIEW.ACTIVE && <ActiveTimer />}
+      {currentView === TIMER_PAGE_VIEW.ACTIVE && <ActiveTimer activeTimer={activeTimer} />}
     </Box>
   );
 };

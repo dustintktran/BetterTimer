@@ -7,8 +7,8 @@ import { nordicTheme, desertTheme, midnightTheme } from './theme';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<TimerPageView>(TIMER_PAGE_VIEW.ACTIVE);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeTheme, _setActiveTheme] = useState('desert');
+  const [activeTheme, setActiveTheme] = useState('desert');
+  const [activeTimer, setActiveTimer] = useState<string | undefined>();
 
   const themeMap: Record<string, Theme> = {
     nordic: nordicTheme,
@@ -20,8 +20,12 @@ const App: React.FC = () => {
       <CssBaseline />
       <Box sx={styles.outerBox}>
         <Stack sx={styles.containerStack}>
-          <GlobalHeader setCurrentView={setCurrentView} />
-          <PageManager currentView={currentView} />
+          <GlobalHeader
+            setCurrentView={setCurrentView}
+            setActiveTheme={setActiveTheme}
+            setActiveTimer={setActiveTimer}
+          />
+          <PageManager currentView={currentView} activeTimer={activeTimer} />
         </Stack>
       </Box>
     </ThemeProvider>

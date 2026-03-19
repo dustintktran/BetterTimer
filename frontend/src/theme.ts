@@ -50,7 +50,7 @@ const nordicPalette: ThemeOptions = {
       contrastText: '#FFFFFF',
     },
     header: {
-      bg: '#1E293B',
+      bg: '#9E9A9B',
       text: '#F8FAFC',
       border: '#0F172A',
     },
