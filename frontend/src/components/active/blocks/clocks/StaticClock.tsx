@@ -1,6 +1,6 @@
 import { Typography, Box, Stack, type Theme } from '@mui/material';
-import { formatTime } from '../../helpers/formatTime';
-import { TIMER_BLOCK_TYPE, type TimerBlockType } from '../../constants';
+import { formatTime } from '../../../../helpers/formatTime';
+import { TIMER_BLOCK_TYPE, type TimerBlockType } from '../../../../constants';
 
 interface StaticClockProps {
   type: TimerBlockType;

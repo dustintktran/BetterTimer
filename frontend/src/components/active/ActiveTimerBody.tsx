@@ -1,9 +1,9 @@
 import { Stack, Box, Button, type Theme } from '@mui/material';
-import NextTimerBlock from './NextTimerBlock';
+import NextTimerBlock from './blocks/NextTimerBlock';
 import { type Timer } from '../../constants';
 import { useCallback, useEffect, useState } from 'react';
-import { UpcomingTimersBlock } from './UpcomingTimersBlock';
-import CurrentTimerBlock from './CurrentTimerBlock';
+import { UpcomingTimersContainer } from './blocks/UpcomingTimersBlock';
+import CurrentTimerBlock from './blocks/CurrentTimerBlock';
 
 interface ActiveTimerBodyProps {
   initialTimers: Timer[];
@@ -61,7 +61,7 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
           </Button>
         </Box>
       </Stack>
-      <UpcomingTimersBlock timers={timers.slice(2)} />
+      <UpcomingTimersContainer timers={timers.slice(2)} />
     </Stack>
   );
 };

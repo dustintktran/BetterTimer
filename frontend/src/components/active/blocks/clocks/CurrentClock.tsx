@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Typography, Box, Stack, LinearProgress } from '@mui/material';
-import { formatTime } from '../../helpers/formatTime';
+import { formatTime } from '../../../../helpers/formatTime';
 
 interface CurrentClockProps {
   initialSeconds: number;

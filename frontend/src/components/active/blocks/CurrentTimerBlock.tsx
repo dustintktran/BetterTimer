@@ -1,7 +1,7 @@
 import { Box, Stack, Typography, Button } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { type Timer } from '../../constants';
-import CurrentClock from './CurrentClock';
+import { type Timer } from '../../../constants';
+import CurrentClock from './clocks/CurrentClock';
 import beep from '../../assets/beep1.mp3';
 import useSound from 'use-sound';
 

@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { TIMER_BLOCK_TYPE, type Timer } from '../../constants';
-import StaticClock from './StaticClock';
+import { TIMER_BLOCK_TYPE, type Timer } from '../../../constants';
+import StaticClock from './clocks/StaticClock';
 
 interface NextTimerBlockProps {
   timer: Timer;
