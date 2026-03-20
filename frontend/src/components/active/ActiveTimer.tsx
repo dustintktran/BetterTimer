@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import ActiveTimerHeader from './ActiveTimerHeader';
 import ActiveTimerBody from './ActiveTimerBody';
-import type { Timer, TimersMap } from '../../constants';
+import type { Clock, ClocksMap } from '../../constants';
 
 interface ActiveTimerProps {
   activeTimer: string | undefined;
@@ -17,7 +17,7 @@ const ActiveTimer = ({ activeTimer = 'lower1' }: ActiveTimerProps) => {
 
 export default ActiveTimer;
 
-const lowerbodyStretches1: Timer[] = [
+const lowerbodyStretches1: Clock[] = [
   {
     name: 'Split Stretch',
     duration: 120,
@@ -64,7 +64,7 @@ const lowerbodyStretches1: Timer[] = [
   },
 ];
 
-const upperBodyStretches: Timer[] = [
+const upperBodyStretches: Clock[] = [
   {
     name: 'Chest Stretch Left',
     duration: 65,
@@ -75,7 +75,7 @@ const upperBodyStretches: Timer[] = [
   },
 ];
 
-const timersMap: TimersMap = {
+const timersMap: ClocksMap = {
   lower1: lowerbodyStretches1,
   upper1: upperBodyStretches,
 };

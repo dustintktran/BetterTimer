@@ -1,13 +1,13 @@
 import { Box, Stack, Typography, Button } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { type Timer } from '../../../constants';
+import { type Clock } from '../../../constants';
 import CurrentClock from './clocks/CurrentClock';
 import beep from '../../../assets/beep1.mp3';
 import useSound from 'use-sound';
 
 interface CurrentTimerBlockProps {
-  timer?: Timer;
-  setTimers: React.Dispatch<React.SetStateAction<Timer[]>>;
+  timer?: Clock;
+  setTimers: React.Dispatch<React.SetStateAction<Clock[]>>;
   isPaused: boolean;
 }
 

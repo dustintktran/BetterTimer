@@ -1,10 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { TIMER_BLOCK_TYPE, type Timer } from '../../../constants';
+import { TIMER_BLOCK_TYPE, type Clock } from '../../../constants';
 import StaticClock from './clocks/StaticClock';
 
 interface NextTimerBlockProps {
-  timer: Timer;
+  timer: Clock;
 }
 
 export const NextTimerBlock = ({ timer }: NextTimerBlockProps) => {

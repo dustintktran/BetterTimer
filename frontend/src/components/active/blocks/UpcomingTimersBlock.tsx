@@ -1,16 +1,16 @@
 import { Stack, Typography, type Theme } from '@mui/material';
-import { type Timer } from '../../../constants';
+import { type Clock } from '../../../constants';
 import UpcomingTimerBlock from './UpcomingTimerBlock';
 
 interface UpcomingTimersContainerProps {
-  timers: Timer[];
+  timers: Clock[];
 }
 
 export const UpcomingTimersContainer = ({ timers }: UpcomingTimersContainerProps) => {
   return (
     <Stack flex={2} sx={styles.container}>
       <Typography sx={styles.header}>Upcoming Timers</Typography>
-      {timers.map((timer: Timer) => (
+      {timers.map((timer: Clock) => (
         <UpcomingTimerBlock timer={timer} />
       ))}
     </Stack>

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "migrate:up": "db-migrate up",
+    "migrate:down": "db-migrate down",
+    "migrate:reset": "db-migrate reset"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +23,8 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.2.0",
+    "db-migrate": "^0.11.14",
+    "db-migrate-mysql": "^3.0.0",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

@@ -1,12 +1,12 @@
 import { Stack, Box, Button, type Theme } from '@mui/material';
 import NextTimerBlock from './blocks/NextTimerBlock';
-import { type Timer } from '../../constants';
+import { type Clock } from '../../constants';
 import { useCallback, useEffect, useState } from 'react';
 import { UpcomingTimersContainer } from './blocks/UpcomingTimersBlock';
 import CurrentTimerBlock from './blocks/CurrentTimerBlock';
 
 interface ActiveTimerBodyProps {
-  initialTimers: Timer[];
+  initialTimers: Clock[];
 }
 
 const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
