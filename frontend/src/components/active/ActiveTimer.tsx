@@ -73,6 +73,34 @@ const upperBodyStretches: Clock[] = [
     name: 'Chest Stretch Right',
     duration: 65,
   },
+  {
+    name: 'Tricep Pull Right',
+    duration: 65,
+  },
+  {
+    name: 'Tricep Pull Left',
+    duration: 65,
+  },
+  {
+    name: 'Cat',
+    duration: 125,
+  },
+  {
+    name: 'Downward Facing Dog',
+    duration: 125,
+  },
+  {
+    name: 'Cross Body Bicep Pull Right',
+    duration: 65,
+  },
+  {
+    name: 'Cross Body Bicep Pull Left',
+    duration: 65,
+  },
+  {
+    name: 'Forearm Stretch',
+    duration: 125,
+  },
 ];
 
 const timersMap: ClocksMap = {

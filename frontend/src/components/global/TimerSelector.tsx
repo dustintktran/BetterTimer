@@ -1,7 +1,8 @@
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HistoryIcon from '@mui/icons-material/History';
-import { TIMER_PAGE_VIEW, type TimerPageView } from '../../constants';
+import { TIMER_PAGE_VIEW, type Timer, type TimerPageView } from '../../constants';
+import apiClient from '../../api/apiClient';
 
 interface TimerSelectorProps {
   setCurrentView: React.Dispatch<React.SetStateAction<TimerPageView>>;
@@ -10,6 +11,9 @@ interface TimerSelectorProps {
 
 const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) => {
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null);
+  const [availableTimers, setAvailableTimers] = useState();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const isOpen = Boolean(anchorEl);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +28,26 @@ const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) =
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    const getAllTimers = async () => {
+      try {
+        setLoading(true);
+
+        // 2. Make the request (Axios automatically parses the JSON)
+        const response = await apiClient.get<Timer[]>('/timers');
+
+        // 3. Update the state with the data from the response
+        setAvailableTimers(response.data);
+      } catch (err: string) {
+        // Axios errors contain the message in a specific place
+        setError(err.response?.data?.message || 'Could not connect to the server');
+      } finally {
+        setLoading(false);
+      }
+    };
+    getAllTimers();
+  }, []);
   return (
     <>
       <Button

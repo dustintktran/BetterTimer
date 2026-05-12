@@ -7,9 +7,9 @@
     "start": "node dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "build": "tsc",
-    "migrate:up": "db-migrate up",
-    "migrate:down": "db-migrate down",
-    "migrate:reset": "db-migrate reset"
+    "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "db:seed": "docker exec -i better_timer_db mysql -u root -ppassword better_timer_db < ./seeds/seed_initial_stretches.sql"
   },
   "keywords": [],
   "author": "",
@@ -17,14 +17,14 @@
   "type": "commonjs",
   "dependencies": {
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
-    "mysql2": "^3.16.3"
+    "mysql2": "^3.20.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^25.2.0",
-    "db-migrate": "^0.11.14",
-    "db-migrate-mysql": "^3.0.0",
+    "@types/node": "^25.5.0",
+    "drizzle-kit": "^0.31.10",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
