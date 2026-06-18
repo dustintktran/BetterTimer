@@ -41,7 +41,7 @@ docker compose up -d
 
 This starts:
 - **MySQL** on port `3306`
-- **Backend API** on port `5001` (maps to container port `5000`)
+- **Backend API** on port `5000`
 
 ### 3. Run database migrations and seed data
 
@@ -117,7 +117,7 @@ The frontend dev server starts at **http://localhost:5173**.
 
 | Variable       | Description               | Default                        |
 | -------------- | ------------------------- | ------------------------------ |
-| `VITE_API_URL` | Backend API base URL      | `http://localhost:5001/api`    |
+| `VITE_API_URL` | Backend API base URL      | `http://localhost:5000/api`    |
 
 ## Project Structure
 
