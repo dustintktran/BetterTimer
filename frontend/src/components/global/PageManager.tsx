@@ -6,12 +6,21 @@ import ActiveTimer from '../active/ActiveTimer';
 interface PageManagerProps {
   currentView: TimerPageView;
   activeTimer: string | undefined;
+  setCurrentView: React.Dispatch<React.SetStateAction<TimerPageView>>;
+  setActiveTimer: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const PageManager = ({ currentView, activeTimer }: PageManagerProps) => {
+const PageManager = ({
+  currentView,
+  activeTimer,
+  setCurrentView,
+  setActiveTimer,
+}: PageManagerProps) => {
   return (
     <Box sx={styles.pageManager}>
-      {currentView === TIMER_PAGE_VIEW.CREATE && <CreateTimer />}
+      {currentView === TIMER_PAGE_VIEW.CREATE && (
+        <CreateTimer setCurrentView={setCurrentView} setActiveTimer={setActiveTimer} />
+      )}
       {currentView === TIMER_PAGE_VIEW.ACTIVE && <ActiveTimer activeTimer={activeTimer} />}
     </Box>
   );
