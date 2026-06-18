@@ -1,7 +1,7 @@
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HistoryIcon from '@mui/icons-material/History';
-import { TIMER_PAGE_VIEW, type Timer, type TimerPageView } from '../../constants';
+import { TIMER_PAGE_VIEW, type TimerSummary, type TimerPageView } from '../../constants';
 import apiClient from '../../api/apiClient';
 
 interface TimerSelectorProps {
@@ -11,17 +11,18 @@ interface TimerSelectorProps {
 
 const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) => {
   const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null);
-  const [availableTimers, setAvailableTimers] = useState();
+  const [availableTimers, setAvailableTimers] = useState<TimerSummary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const isOpen = Boolean(anchorEl);
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleSelectTimer = (timer: string) => () => {
+  const handleSelectTimer = (timerId: string) => () => {
     setCurrentView(TIMER_PAGE_VIEW.ACTIVE);
-    setActiveTimer(timer);
+    setActiveTimer(timerId);
     handleClose();
   };
 
@@ -33,21 +34,18 @@ const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) =
     const getAllTimers = async () => {
       try {
         setLoading(true);
-
-        // 2. Make the request (Axios automatically parses the JSON)
-        const response = await apiClient.get<Timer[]>('/timers');
-
-        // 3. Update the state with the data from the response
+        const response = await apiClient.get<TimerSummary[]>('/timers');
         setAvailableTimers(response.data);
-      } catch (err: string) {
-        // Axios errors contain the message in a specific place
-        setError(err.response?.data?.message || 'Could not connect to the server');
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Could not connect to the server';
+        setError(message);
       } finally {
         setLoading(false);
       }
     };
     getAllTimers();
   }, []);
+
   return (
     <>
       <Button
@@ -74,8 +72,15 @@ const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) =
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleSelectTimer('lower1')}>Lower Body 1</MenuItem>
-        <MenuItem onClick={handleSelectTimer('upper1')}>Upper Body 1</MenuItem>
+        {loading && <MenuItem disabled>Loading...</MenuItem>}
+        {error && <MenuItem disabled>{error}</MenuItem>}
+        {!loading &&
+          !error &&
+          availableTimers.map((timer) => (
+            <MenuItem key={timer.id} onClick={handleSelectTimer(timer.id)}>
+              {timer.title}
+            </MenuItem>
+          ))}
       </Menu>
     </>
   );

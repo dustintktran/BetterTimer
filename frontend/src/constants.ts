@@ -14,23 +14,20 @@ export const TIMER_BLOCK_TYPE = {
 export type TimerBlockType = (typeof TIMER_BLOCK_TYPE)[keyof typeof TIMER_BLOCK_TYPE];
 
 export type Clock = {
-  // id: Uuid;
+  id: string;
   name: string;
   duration: number;
+  position: number;
 };
 
-export type ClocksMap = {
-  [key: string]: Clock[];
+export type TimerSummary = {
+  id: string;
+  title: string;
+  userId: number;
 };
 
 export type Timer = {
-  // id: string;
+  id: string;
   title: string;
   clocks: Clock[];
 };
-
-// export type Uuid = string & { readonly brand: unique symbol };
-
-// export const toUuid = (uuid: string): Uuid => {
-//   return uuid as Uuid;
-// };

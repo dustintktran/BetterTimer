@@ -9,19 +9,22 @@
     "build": "tsc",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
-    "db:seed": "docker exec -i better_timer_db mysql -u root -ppassword better_timer_db < ./seeds/seed_initial_stretches.sql"
+    "db:seed": "ts-node src/seed.ts",
+    "db:seed:sql": "docker exec -i better_timer_db mysql -u root -ppassword better_timer_db < ./seeds/seed_initial_stretches.sql"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
     "mysql2": "^3.20.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
     "drizzle-kit": "^0.31.10",

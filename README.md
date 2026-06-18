@@ -45,21 +45,21 @@ This starts:
 
 ### 3. Run database migrations and seed data
 
-Once the containers are running, apply the Drizzle migrations and seed sample data:
+Once the containers are running, install backend dependencies, apply the Drizzle migrations, and seed the sample timer routines:
 
 ```bash
 cd backend
 npm install
-npm run db:migrate
+DB_HOST=localhost DB_USER=root DB_PASSWORD=password DB_DATABASE=better_timer_db npm run db:migrate
 npm run db:seed
 cd ..
 ```
 
-> **Note:** `db:migrate` requires the database environment variables (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`). When running outside Docker, set them to point at `localhost`:
->
-> ```bash
-> DB_HOST=localhost DB_USER=root DB_PASSWORD=password DB_DATABASE=better_timer_db npm run db:migrate
-> ```
+The seed script (`npm run db:seed`) inserts two sample routines:
+- **Leg Flexibility Routine** — 11 stretches (splits, calves, quads, hamstrings, etc.)
+- **Upper Body Flexibility Routine** — 9 stretches (chest, triceps, cat, downward dog, etc.)
+
+> **Note:** `db:migrate` and `db:seed` require the database environment variables (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`). The defaults in the seed script point to `localhost`, so the above works when MySQL is running via Docker Compose. You can also seed via raw SQL with `npm run db:seed:sql` (requires the Docker container to be running).
 
 ### 4. Start the frontend
 
@@ -92,7 +92,8 @@ The frontend dev server starts at **http://localhost:5173**.
 | `npm run start`       | Run the compiled server (`dist/index.js`)    |
 | `npm run db:generate` | Generate Drizzle migrations from schema      |
 | `npm run db:migrate`  | Apply Drizzle migrations                     |
-| `npm run db:seed`     | Seed sample stretching routines into MySQL   |
+| `npm run db:seed`     | Seed sample routines via TypeScript + Drizzle |
+| `npm run db:seed:sql` | Seed via raw SQL through Docker exec          |
 
 ### Docker
 
@@ -103,14 +104,20 @@ The frontend dev server starts at **http://localhost:5173**.
 
 ## Environment Variables
 
-The backend uses these environment variables (defaults are set in `docker-compose.yml`):
+### Backend
 
-| Variable      | Description         | Default            |
-| ------------- | ------------------- | ------------------ |
-| `DB_HOST`     | MySQL host          | `db` (in Docker)   |
-| `DB_USER`     | MySQL user          | `root`             |
-| `DB_PASSWORD` | MySQL password      | `password`         |
-| `DB_DATABASE` | Database name       | `better_timer_db`  |
+| Variable      | Description         | Default              |
+| ------------- | ------------------- | -------------------- |
+| `DB_HOST`     | MySQL host          | `db` (Docker) / `localhost` (seed) |
+| `DB_USER`     | MySQL user          | `root`               |
+| `DB_PASSWORD` | MySQL password      | `password`           |
+| `DB_DATABASE` | Database name       | `better_timer_db`    |
+
+### Frontend
+
+| Variable       | Description               | Default                        |
+| -------------- | ------------------------- | ------------------------------ |
+| `VITE_API_URL` | Backend API base URL      | `http://localhost:5001/api`    |
 
 ## Project Structure
 
@@ -129,7 +136,8 @@ BetterTimer/
 ├── backend/                  # Express API server
 │   ├── src/
 │   │   ├── db/               # Drizzle schema
-│   │   └── routes/           # API route handlers
+│   │   ├── routes/           # API route handlers
+│   │   └── seed.ts           # TypeScript seed script
 │   ├── migrations/           # Drizzle SQL migrations
-│   └── seeds/                # SQL seed files
+│   └── seeds/                # SQL seed files (legacy)
 ```
