@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import crypto from 'crypto';
 import { db } from '../index';
 import { timers, clocks, timerClockSequence} from '../db/schema';
 import { eq } from 'drizzle-orm';
@@ -61,6 +62,47 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// POST /api/timers
+router.post('/', async (req, res) => {
+  try {
+    const { title, clocks: clockInputs } = req.body;
+
+    if (!title || !Array.isArray(clockInputs) || clockInputs.length === 0) {
+      return res.status(400).json({ error: 'Title and at least one clock are required' });
+    }
+
+    const timerId = crypto.randomUUID();
+
+    await db.insert(timers).values({
+      id: timerId,
+      userId: 1,
+      title,
+    });
+
+    const clockRows = clockInputs.map((clock: { name: string; duration: number }) => ({
+      id: crypto.randomUUID(),
+      userId: 1,
+      name: clock.name,
+      duration: clock.duration,
+    }));
+
+    await db.insert(clocks).values(clockRows);
+
+    const sequenceRows = clockRows.map((clock, index) => ({
+      timerId,
+      clockId: clock.id,
+      position: index + 1,
+    }));
+
+    await db.insert(timerClockSequence).values(sequenceRows);
+
+    res.status(201).json({ id: timerId, title, clocks: clockRows });
+  } catch (error) {
+    console.error('Error creating timer:', error);
+    res.status(500).json({ error: 'Failed to create timer' });
   }
 });
 

@@ -25,7 +25,12 @@ const App: React.FC = () => {
             setActiveTheme={setActiveTheme}
             setActiveTimer={setActiveTimer}
           />
-          <PageManager currentView={currentView} activeTimer={activeTimer} />
+          <PageManager
+            currentView={currentView}
+            activeTimer={activeTimer}
+            setCurrentView={setCurrentView}
+            setActiveTimer={setActiveTimer}
+          />
         </Stack>
       </Box>
     </ThemeProvider>
