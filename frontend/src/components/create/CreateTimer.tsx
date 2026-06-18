@@ -119,15 +119,17 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
         </Typography>
       )}
 
-      <Button
-        variant='contained'
-        onClick={handleSave}
-        disabled={saving}
-        sx={styles.saveButton}
-        color='primary'
-      >
-        {saving ? 'Saving...' : 'Save Timer'}
-      </Button>
+      <Box sx={styles.saveButtonContainer}>
+        <Button
+          variant='contained'
+          onClick={handleSave}
+          disabled={saving}
+          sx={styles.saveButton}
+          color='primary'
+        >
+          {saving ? 'Saving...' : 'Save Timer'}
+        </Button>
+      </Box>
     </Box>
   );
 };
@@ -169,10 +171,15 @@ const styles = {
     minWidth: 140,
   },
   addButton: {
-    marginBottom: 8,
+    marginBottom: 4,
   },
   error: {
     marginBottom: 4,
+  },
+  saveButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 12,
   },
   saveButton: {
     paddingY: 4,
