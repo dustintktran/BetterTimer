@@ -1,109 +1,60 @@
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import ActiveTimerHeader from './ActiveTimerHeader';
 import ActiveTimerBody from './ActiveTimerBody';
-import type { Clock, ClocksMap } from '../../constants';
+import type { Timer } from '../../constants';
+import apiClient from '../../api/apiClient';
 
 interface ActiveTimerProps {
   activeTimer: string | undefined;
 }
-const ActiveTimer = ({ activeTimer = 'lower1' }: ActiveTimerProps) => {
+
+const ActiveTimer = ({ activeTimer }: ActiveTimerProps) => {
+  const [timer, setTimer] = useState<Timer | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!activeTimer) return;
+
+    const fetchTimer = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await apiClient.get<Timer>(`/timers/${activeTimer}`);
+        setTimer(response.data);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Failed to load timer';
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTimer();
+  }, [activeTimer]);
+
+  if (!activeTimer) {
+    return <Typography margin={4}>Select a timer to get started.</Typography>;
+  }
+
+  if (loading) {
+    return <Typography margin={4}>Loading timer...</Typography>;
+  }
+
+  if (error) {
+    return <Typography margin={4}>Error: {error}</Typography>;
+  }
+
+  if (!timer) {
+    return null;
+  }
+
   return (
     <Stack direction='column' sx={{ height: '100%', minHeight: 0 }}>
-      <ActiveTimerHeader headerText='New Timer 1' />
-      <ActiveTimerBody key={`${activeTimer}`} initialTimers={timersMap[activeTimer]} />
+      <ActiveTimerHeader headerText={timer.title} />
+      <ActiveTimerBody key={timer.id} initialTimers={timer.clocks} />
     </Stack>
   );
 };
 
 export default ActiveTimer;
-
-const lowerbodyStretches1: Clock[] = [
-  {
-    name: 'Split Stretch',
-    duration: 120,
-  },
-  {
-    name: 'Calf Stretch Left',
-    duration: 65,
-  },
-  {
-    name: 'Calf Stretch Right',
-    duration: 65,
-  },
-  {
-    name: 'Quad Stretch Left',
-    duration: 65,
-  },
-  {
-    name: 'Quad Stretch Right',
-    duration: 65,
-  },
-  {
-    name: 'Hamstring Stretch',
-    duration: 125,
-  },
-  {
-    name: 'Butterfly Stretch',
-    duration: 125,
-  },
-  {
-    name: '90-90 Stretch Right',
-    duration: 65,
-  },
-  {
-    name: '90-90 Stretch Left',
-    duration: 65,
-  },
-  {
-    name: 'Crow Stretch Right',
-    duration: 65,
-  },
-  {
-    name: 'Crow Stretch Left',
-    duration: 65,
-  },
-];
-
-const upperBodyStretches: Clock[] = [
-  {
-    name: 'Chest Stretch Left',
-    duration: 65,
-  },
-  {
-    name: 'Chest Stretch Right',
-    duration: 65,
-  },
-  {
-    name: 'Tricep Pull Right',
-    duration: 65,
-  },
-  {
-    name: 'Tricep Pull Left',
-    duration: 65,
-  },
-  {
-    name: 'Cat',
-    duration: 125,
-  },
-  {
-    name: 'Downward Facing Dog',
-    duration: 125,
-  },
-  {
-    name: 'Cross Body Bicep Pull Right',
-    duration: 65,
-  },
-  {
-    name: 'Cross Body Bicep Pull Left',
-    duration: 65,
-  },
-  {
-    name: 'Forearm Stretch',
-    duration: 125,
-  },
-];
-
-const timersMap: ClocksMap = {
-  lower1: lowerbodyStretches1,
-  upper1: upperBodyStretches,
-};
