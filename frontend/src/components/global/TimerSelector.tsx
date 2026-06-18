@@ -1,5 +1,5 @@
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import HistoryIcon from '@mui/icons-material/History';
 import { TIMER_PAGE_VIEW, type TimerSummary, type TimerPageView } from '../../constants';
 import apiClient from '../../api/apiClient';
@@ -16,8 +16,23 @@ const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) =
   const [error, setError] = useState<string | null>(null);
   const isOpen = Boolean(anchorEl);
 
+  const fetchTimers = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get<TimerSummary[]>('/timers');
+      setAvailableTimers(response.data);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Could not connect to the server';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    fetchTimers();
   };
 
   const handleSelectTimer = (timerId: string) => () => {
@@ -29,22 +44,6 @@ const TimerSelector = ({ setCurrentView, setActiveTimer }: TimerSelectorProps) =
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    const getAllTimers = async () => {
-      try {
-        setLoading(true);
-        const response = await apiClient.get<TimerSummary[]>('/timers');
-        setAvailableTimers(response.data);
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Could not connect to the server';
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAllTimers();
-  }, []);
 
   return (
     <>
