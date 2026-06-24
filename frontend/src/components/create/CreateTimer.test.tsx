@@ -126,6 +126,22 @@ describe('CreateTimer', () => {
     });
   });
 
+  it('displays fallback error when API error is not an Error instance', async () => {
+    (apiClient.post as ReturnType<typeof vi.fn>).mockRejectedValue('string error');
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.type(screen.getByLabelText('Timer Title'), 'My Routine');
+    await user.clear(screen.getByLabelText('Clock Name'));
+    await user.type(screen.getByLabelText('Clock Name'), 'Stretch A');
+
+    await user.click(screen.getByText('Save Timer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Failed to save timer')).toBeInTheDocument();
+    });
+  });
+
   it('shows Saving... text while request is in progress', async () => {
     (apiClient.post as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();

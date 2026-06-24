@@ -15,13 +15,13 @@ describe('StaticClock Component', () => {
     expect(screen.getByText('05:00:00')).toBeInTheDocument();
   });
 
-  it('renders the formatted time correctly', () => {
+  it('renders the formatted time correctly for minutes', () => {
     render(<StaticClock type={TIMER_BLOCK_TYPE.NEXT} seconds={300} />);
 
     expect(screen.getByText('00:05:00')).toBeInTheDocument();
   });
 
-  it('renders the formatted time correctly', () => {
+  it('renders the formatted time correctly for seconds', () => {
     render(<StaticClock type={TIMER_BLOCK_TYPE.NEXT} seconds={5} />);
 
     expect(screen.getByText('00:00:05')).toBeInTheDocument();
