@@ -41,9 +41,8 @@ export default App;
 
 const styles = {
   outerBox: (theme: Theme) => ({
-    width: 'calc(100% - 8px)',
+    width: '100%',
     height: '100vh',
-    marginLeft: '4px',
     background: theme.palette.background.paper,
   }),
   containerStack: {
