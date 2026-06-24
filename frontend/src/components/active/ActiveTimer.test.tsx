@@ -62,6 +62,16 @@ describe('ActiveTimer', () => {
     });
   });
 
+  it('displays fallback message when error is not an Error instance', async () => {
+    (apiClient.get as ReturnType<typeof vi.fn>).mockRejectedValue('some string error');
+
+    render(<ActiveTimer activeTimer='timer-123' />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Error: Failed to load timer')).toBeInTheDocument();
+    });
+  });
+
   it('calls the correct API endpoint with timer id', () => {
     (apiClient.get as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     render(<ActiveTimer activeTimer='abc-456' />);

@@ -100,4 +100,19 @@ describe('TimerSelector', () => {
       expect(screen.getByText('Could not connect to the server')).toBeInTheDocument();
     });
   });
+
+  it('displays fallback error when error is not an Error instance', async () => {
+    (apiClient.get as ReturnType<typeof vi.fn>).mockRejectedValue('string error');
+    const user = userEvent.setup();
+
+    render(
+      <TimerSelector setCurrentView={mockSetCurrentView} setActiveTimer={mockSetActiveTimer} />
+    );
+
+    await user.click(screen.getByText('Select Timer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Could not connect to the server')).toBeInTheDocument();
+    });
+  });
 });
