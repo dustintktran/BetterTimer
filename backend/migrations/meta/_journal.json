@@ -8,6 +8,13 @@
       "when": 1774046822862,
       "tag": "0000_mixed_korath",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1782334970211,
+      "tag": "0001_chief_umar",
+      "breakpoints": true
     }
   ]
 }

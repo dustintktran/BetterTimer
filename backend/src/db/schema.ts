@@ -5,7 +5,10 @@ export const clocks = mysqlTable('clocks', {
   id: char('id', { length: 36 }).primaryKey(),
   userId: int('user_id').default(1),
   name: varchar('name', { length: 255 }).notNull(),
-  duration: int('duration').notNull(),
+  duration: int('duration').default(0).notNull(),
+  type: mysqlEnum('type', ['timed', 'reps']).default('timed').notNull(),
+  reps: int('reps'),
+  sets: int('sets').default(1).notNull(),
 });
 
 // Timers Table
