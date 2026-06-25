@@ -92,6 +92,7 @@ describe('Timer Routes', () => {
           clockType: 'timed',
           reps: null,
           sets: 1,
+          restBetweenSets: 0,
           position: 1,
         },
         {
@@ -103,6 +104,7 @@ describe('Timer Routes', () => {
           clockType: 'reps',
           reps: 15,
           sets: 3,
+          restBetweenSets: 30,
           position: 2,
         },
       ];
@@ -114,8 +116,8 @@ describe('Timer Routes', () => {
         id: 't1',
         title: 'Leg Routine',
         clocks: [
-          { id: 'c1', name: 'Stretch A', duration: 60, type: 'timed', reps: null, sets: 1, position: 1 },
-          { id: 'c2', name: 'Push-ups', duration: 0, type: 'reps', reps: 15, sets: 3, position: 2 },
+          { id: 'c1', name: 'Stretch A', duration: 60, type: 'timed', reps: null, sets: 1, restBetweenSets: 0, position: 1 },
+          { id: 'c2', name: 'Push-ups', duration: 0, type: 'reps', reps: 15, sets: 3, restBetweenSets: 30, position: 2 },
         ],
       });
     });
@@ -140,6 +142,7 @@ describe('Timer Routes', () => {
           clockType: null,
           reps: null,
           sets: null,
+          restBetweenSets: null,
           position: null,
         },
       ];
@@ -178,6 +181,7 @@ describe('Timer Routes', () => {
       expect(res.body.clocks[0].type).toBe('timed');
       expect(res.body.clocks[0].reps).toBeNull();
       expect(res.body.clocks[0].sets).toBe(1);
+      expect(res.body.clocks[0].restBetweenSets).toBe(0);
     });
 
     it('creates a timer with rep-based clocks', async () => {
@@ -185,7 +189,9 @@ describe('Timer Routes', () => {
         .post('/api/timers')
         .send({
           title: 'Strength',
-          clocks: [{ name: 'Push-ups', duration: 0, type: 'reps', reps: 15, sets: 3 }],
+          clocks: [
+            { name: 'Push-ups', duration: 0, type: 'reps', reps: 15, sets: 3, restBetweenSets: 30 },
+          ],
         });
 
       expect(res.status).toBe(201);
@@ -194,6 +200,7 @@ describe('Timer Routes', () => {
       expect(res.body.clocks[0].type).toBe('reps');
       expect(res.body.clocks[0].reps).toBe(15);
       expect(res.body.clocks[0].sets).toBe(3);
+      expect(res.body.clocks[0].restBetweenSets).toBe(30);
     });
 
     it('defaults type to timed when not specified', async () => {
@@ -208,6 +215,7 @@ describe('Timer Routes', () => {
       expect(res.body.clocks[0].type).toBe('timed');
       expect(res.body.clocks[0].reps).toBeNull();
       expect(res.body.clocks[0].sets).toBe(1);
+      expect(res.body.clocks[0].restBetweenSets).toBe(0);
     });
 
     it('sets duration to 0 for rep-type clocks regardless of input', async () => {

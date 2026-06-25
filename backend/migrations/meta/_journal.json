@@ -15,6 +15,13 @@
       "when": 1782334970211,
       "tag": "0001_chief_umar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1782430509468,
+      "tag": "0002_fat_queen_noir",
+      "breakpoints": true
     }
   ]
 }

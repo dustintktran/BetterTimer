@@ -1,0 +1,1 @@
+ALTER TABLE `clocks` ADD `rest_between_sets` int DEFAULT 0 NOT NULL;
