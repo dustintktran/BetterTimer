@@ -1,12 +1,25 @@
 import { useState } from 'react';
-import { Box, Button, IconButton, Stack, TextField, Typography, type Theme } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  type Theme,
+} from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import apiClient from '../../api/apiClient';
-import { TIMER_PAGE_VIEW, type TimerPageView } from '../../constants';
+import { CLOCK_TYPE, TIMER_PAGE_VIEW, type ClockType, type TimerPageView } from '../../constants';
 
 interface ClockInput {
   name: string;
+  type: ClockType;
   duration: number;
+  reps: number;
+  sets: number;
 }
 
 interface CreateTimerProps {
@@ -16,12 +29,17 @@ interface CreateTimerProps {
 
 const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
   const [title, setTitle] = useState('');
-  const [clockInputs, setClockInputs] = useState<ClockInput[]>([{ name: '', duration: 60 }]);
+  const [clockInputs, setClockInputs] = useState<ClockInput[]>([
+    { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1 },
+  ]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleAddClock = () => {
-    setClockInputs([...clockInputs, { name: '', duration: 60 }]);
+    setClockInputs([
+      ...clockInputs,
+      { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1 },
+    ]);
   };
 
   const handleRemoveClock = (index: number) => {
@@ -40,9 +58,11 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
       return;
     }
 
-    const validClocks = clockInputs.filter((c) => c.name.trim() && c.duration > 0);
+    const validClocks = clockInputs.filter(
+      (c) => c.name.trim() && (c.type === CLOCK_TYPE.REPS ? c.reps > 0 : c.duration > 0)
+    );
     if (validClocks.length === 0) {
-      setError('At least one clock with a name and duration is required');
+      setError('At least one clock with a name and duration/reps is required');
       return;
     }
 
@@ -53,7 +73,10 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
         title: title.trim(),
         clocks: validClocks.map((c) => ({
           name: c.name.trim(),
-          duration: c.duration,
+          type: c.type,
+          duration: c.type === CLOCK_TYPE.REPS ? 0 : c.duration,
+          reps: c.type === CLOCK_TYPE.REPS ? c.reps : null,
+          sets: c.sets,
         })),
       });
       setActiveTimer(response.data.id);
@@ -82,29 +105,65 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
 
       <Stack spacing={4} sx={styles.clockList}>
         {clockInputs.map((clock, index) => (
-          <Stack key={index} direction='row' spacing={4} alignItems='center'>
-            <Typography sx={styles.clockIndex}>{index + 1}.</Typography>
-            <TextField
-              label='Clock Name'
-              value={clock.name}
-              onChange={(e) => handleClockChange(index, 'name', e.target.value)}
-              sx={styles.clockNameInput}
-            />
-            <TextField
-              label='Duration (seconds)'
-              type='number'
-              value={clock.duration}
-              onChange={(e) => handleClockChange(index, 'duration', parseInt(e.target.value) || 0)}
-              sx={styles.durationInput}
-              slotProps={{ htmlInput: { min: 1 } }}
-            />
-            <IconButton
-              onClick={() => handleRemoveClock(index)}
-              disabled={clockInputs.length === 1}
-              color='error'
-            >
-              <Delete />
-            </IconButton>
+          <Stack key={index} spacing={2}>
+            <Stack direction='row' spacing={4} alignItems='center'>
+              <Typography sx={styles.clockIndex}>{index + 1}.</Typography>
+              <TextField
+                label='Clock Name'
+                value={clock.name}
+                onChange={(e) => handleClockChange(index, 'name', e.target.value)}
+                sx={styles.clockNameInput}
+              />
+              <ToggleButtonGroup
+                value={clock.type}
+                exclusive
+                onChange={(_, val) => {
+                  if (val) handleClockChange(index, 'type', val);
+                }}
+                size='small'
+              >
+                <ToggleButton value={CLOCK_TYPE.TIMED}>Timed</ToggleButton>
+                <ToggleButton value={CLOCK_TYPE.REPS}>Reps</ToggleButton>
+              </ToggleButtonGroup>
+              <IconButton
+                onClick={() => handleRemoveClock(index)}
+                disabled={clockInputs.length === 1}
+                color='error'
+              >
+                <Delete />
+              </IconButton>
+            </Stack>
+            <Stack direction='row' spacing={4} sx={{ marginLeft: 5 }}>
+              {clock.type === CLOCK_TYPE.TIMED ? (
+                <TextField
+                  label='Duration (seconds)'
+                  type='number'
+                  value={clock.duration}
+                  onChange={(e) =>
+                    handleClockChange(index, 'duration', parseInt(e.target.value) || 0)
+                  }
+                  sx={styles.durationInput}
+                  slotProps={{ htmlInput: { min: 1 } }}
+                />
+              ) : (
+                <TextField
+                  label='Reps'
+                  type='number'
+                  value={clock.reps}
+                  onChange={(e) => handleClockChange(index, 'reps', parseInt(e.target.value) || 0)}
+                  sx={styles.repsInput}
+                  slotProps={{ htmlInput: { min: 1 } }}
+                />
+              )}
+              <TextField
+                label='Sets'
+                type='number'
+                value={clock.sets}
+                onChange={(e) => handleClockChange(index, 'sets', parseInt(e.target.value) || 1)}
+                sx={styles.setsInput}
+                slotProps={{ htmlInput: { min: 1 } }}
+              />
+            </Stack>
           </Stack>
         ))}
       </Stack>
@@ -169,6 +228,15 @@ const styles = {
   durationInput: {
     flex: 1,
     minWidth: 140,
+  },
+  repsInput: {
+    flex: 1,
+    minWidth: 120,
+  },
+  setsInput: {
+    flex: 1,
+    minWidth: 100,
+    maxWidth: 120,
   },
   addButton: {
     marginBottom: 4,
