@@ -17,17 +17,20 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
 
   const nextTimerExists = timers.length > 1;
 
+  const timersComplete = timers.length === 0;
+  const isRunning = !isPaused && !timersComplete;
+
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isPaused) setElapsedSeconds((prev) => prev + 1);
+      if (isRunning) setElapsedSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isRunning]);
 
   const handlePause = useCallback(() => {
-    setIsPaused(!isPaused);
-  }, [isPaused]);
+    if (!timersComplete) setIsPaused(!isPaused);
+  }, [isPaused, timersComplete]);
 
   useEffect(() => {
     const handleSpacebar = (event: KeyboardEvent) => {
