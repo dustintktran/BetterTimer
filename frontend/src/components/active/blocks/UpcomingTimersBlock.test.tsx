@@ -16,8 +16,24 @@ describe('UpcomingTimersContainer', () => {
 
   it('renders multiple upcoming timer blocks', () => {
     const timers = [
-      { id: 'c3', name: 'Quad Stretch', duration: 60, position: 3, type: 'timed' as const, reps: null, sets: 1 },
-      { id: 'c4', name: 'Hip Opener', duration: 90, position: 4, type: 'timed' as const, reps: null, sets: 1 },
+      {
+        id: 'c3',
+        name: 'Quad Stretch',
+        duration: 60,
+        position: 3,
+        type: 'timed' as const,
+        reps: null,
+        sets: 1,
+      },
+      {
+        id: 'c4',
+        name: 'Hip Opener',
+        duration: 90,
+        position: 4,
+        type: 'timed' as const,
+        reps: null,
+        sets: 1,
+      },
     ];
     render(<UpcomingTimersContainer timers={timers} />);
     expect(screen.getByText('Quad Stretch')).toBeInTheDocument();

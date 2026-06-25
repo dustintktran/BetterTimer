@@ -3,7 +3,15 @@ import { describe, it, expect } from 'vitest';
 import UpcomingTimerBlock from './UpcomingTimerBlock';
 
 describe('UpcomingTimerBlock', () => {
-  const mockTimer = { id: 'c3', name: 'Calf Stretch', duration: 90, position: 3, type: 'timed' as const, reps: null, sets: 1 };
+  const mockTimer = {
+    id: 'c3',
+    name: 'Calf Stretch',
+    duration: 90,
+    position: 3,
+    type: 'timed' as const,
+    reps: null,
+    sets: 1,
+  };
 
   it('renders the timer name', () => {
     render(<UpcomingTimerBlock timer={mockTimer} />);
