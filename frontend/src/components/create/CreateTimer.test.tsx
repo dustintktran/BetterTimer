@@ -79,7 +79,7 @@ describe('CreateTimer', () => {
     await user.click(screen.getByText('Save Timer'));
 
     expect(
-      screen.getByText('At least one clock with a name and duration is required')
+      screen.getByText('At least one clock with a name and duration/reps is required')
     ).toBeInTheDocument();
     expect(apiClient.post).not.toHaveBeenCalled();
   });
@@ -100,7 +100,7 @@ describe('CreateTimer', () => {
     await waitFor(() => {
       expect(apiClient.post).toHaveBeenCalledWith('/timers', {
         title: 'My Routine',
-        clocks: [{ name: 'Stretch A', duration: 60 }],
+        clocks: [{ name: 'Stretch A', type: 'timed', duration: 60, reps: null, sets: 1 }],
       });
     });
 

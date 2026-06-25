@@ -6,11 +6,13 @@ import { sql } from 'drizzle-orm';
 const LEG_TIMER_ID = 'b1a2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d';
 const UPPER_TIMER_ID = 'u1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d';
 const STRENGTH_TIMER_ID = 's1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c';
+const FULLBODY_TIMER_ID = 'f1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c';
 
 const timerRows = [
   { id: LEG_TIMER_ID, userId: 1, title: 'Leg Flexibility Routine' },
   { id: UPPER_TIMER_ID, userId: 1, title: 'Upper Body Flexibility Routine' },
   { id: STRENGTH_TIMER_ID, userId: 1, title: 'Strength Circuit' },
+  { id: FULLBODY_TIMER_ID, userId: 1, title: 'Full Body HIIT' },
 ];
 
 const clockRows = [
@@ -39,6 +41,12 @@ const clockRows = [
   { id: 'c203-uuid', userId: 1, name: 'Squats', duration: 0, type: 'reps' as const, reps: 20, sets: 3 },
   { id: 'c204-uuid', userId: 1, name: 'Lunges', duration: 0, type: 'reps' as const, reps: 12, sets: 2 },
   { id: 'c205-uuid', userId: 1, name: 'Rest', duration: 30, type: 'timed' as const, reps: null, sets: 1 },
+  { id: 'c301-uuid', userId: 1, name: 'Burpees', duration: 0, type: 'reps' as const, reps: 10, sets: 3 },
+  { id: 'c302-uuid', userId: 1, name: 'Jump Squats', duration: 0, type: 'reps' as const, reps: 15, sets: 3 },
+  { id: 'c303-uuid', userId: 1, name: 'Mountain Climbers', duration: 0, type: 'reps' as const, reps: 20, sets: 2 },
+  { id: 'c304-uuid', userId: 1, name: 'Bicycle Crunches', duration: 0, type: 'reps' as const, reps: 25, sets: 2 },
+  { id: 'c305-uuid', userId: 1, name: 'High Knees', duration: 45, type: 'timed' as const, reps: null, sets: 2 },
+  { id: 'c306-uuid', userId: 1, name: 'Active Rest', duration: 30, type: 'timed' as const, reps: null, sets: 1 },
 ];
 
 const legSequence = [
@@ -55,6 +63,11 @@ const strengthSequence = [
   'c201-uuid', 'c205-uuid', 'c203-uuid', 'c205-uuid', 'c204-uuid', 'c205-uuid', 'c202-uuid',
 ];
 
+const fullbodySequence = [
+  'c301-uuid', 'c306-uuid', 'c302-uuid', 'c306-uuid',
+  'c303-uuid', 'c306-uuid', 'c304-uuid', 'c306-uuid', 'c305-uuid',
+];
+
 const sequenceRows = [
   ...legSequence.map((clockId, i) => ({
     timerId: LEG_TIMER_ID,
@@ -68,6 +81,11 @@ const sequenceRows = [
   })),
   ...strengthSequence.map((clockId, i) => ({
     timerId: STRENGTH_TIMER_ID,
+    clockId,
+    position: i + 1,
+  })),
+  ...fullbodySequence.map((clockId, i) => ({
+    timerId: FULLBODY_TIMER_ID,
     clockId,
     position: i + 1,
   })),
