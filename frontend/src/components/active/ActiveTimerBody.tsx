@@ -1,9 +1,10 @@
-import { Stack, Box, Button, type Theme } from '@mui/material';
+import { Stack, Box, Button, Typography, type Theme } from '@mui/material';
 import NextTimerBlock from './blocks/NextTimerBlock';
 import { type Clock } from '../../constants';
 import { useCallback, useEffect, useState } from 'react';
 import { UpcomingTimersContainer } from './blocks/UpcomingTimersBlock';
 import CurrentTimerBlock from './blocks/CurrentTimerBlock';
+import { formatTime } from '../../helpers/formatTime';
 
 interface ActiveTimerBodyProps {
   initialTimers: Clock[];
@@ -12,12 +13,24 @@ interface ActiveTimerBodyProps {
 const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
   const [timers, setTimers] = useState(initialTimers);
   const [isPaused, setIsPaused] = useState(true);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const nextTimerExists = timers.length > 1;
 
+  const timersComplete = timers.length === 0;
+  const isRunning = !isPaused && !timersComplete;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isRunning) setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
   const handlePause = useCallback(() => {
-    setIsPaused(!isPaused);
-  }, [isPaused]);
+    if (!timersComplete) setIsPaused(!isPaused);
+  }, [isPaused, timersComplete]);
 
   useEffect(() => {
     const handleSpacebar = (event: KeyboardEvent) => {
@@ -51,6 +64,9 @@ const ActiveTimerBody = ({ initialTimers }: ActiveTimerBodyProps) => {
           {nextTimerExists && <NextTimerBlock timer={timers[1]} />}
         </Stack>
         <Box flex={1} sx={styles.actionsContainer} marginBottom={2}>
+          {elapsedSeconds > 0 && (
+            <Typography sx={styles.elapsedTimer}>Total: {formatTime(elapsedSeconds)}</Typography>
+          )}
           <Button
             variant='contained'
             sx={styles.pauseButton}
@@ -73,9 +89,16 @@ const styles = {
     marginTop: theme.spacing(2),
     marginX: theme.spacing(2),
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: theme.spacing(2),
   }),
+  elapsedTimer: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    opacity: 0.8,
+  },
   pauseButton: {
     paddingY: 12,
     paddingX: 32,
