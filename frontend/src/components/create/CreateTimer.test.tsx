@@ -142,6 +142,51 @@ describe('CreateTimer', () => {
     });
   });
 
+  it('defaults to Timed type with duration input visible', () => {
+    renderComponent();
+    expect(screen.getByText('Timed')).toBeInTheDocument();
+    expect(screen.getByText('Reps')).toBeInTheDocument();
+    expect(screen.getByLabelText('Duration (seconds)')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Reps')).not.toBeInTheDocument();
+  });
+
+  it('switches to Reps input when Reps toggle is clicked', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.click(screen.getByText('Reps'));
+
+    expect(screen.getByLabelText('Reps')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Duration (seconds)')).not.toBeInTheDocument();
+  });
+
+  it('always shows Sets input', () => {
+    renderComponent();
+    expect(screen.getByLabelText('Sets')).toBeInTheDocument();
+  });
+
+  it('submits rep-type clock with correct payload', async () => {
+    (apiClient.post as ReturnType<typeof vi.fn>).mockResolvedValue({
+      data: { id: 'new-id', title: 'Rep Workout' },
+    });
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.type(screen.getByLabelText('Timer Title'), 'Rep Workout');
+    await user.clear(screen.getByLabelText('Clock Name'));
+    await user.type(screen.getByLabelText('Clock Name'), 'Push-ups');
+    await user.click(screen.getByText('Reps'));
+
+    await user.click(screen.getByText('Save Timer'));
+
+    await waitFor(() => {
+      expect(apiClient.post).toHaveBeenCalledWith('/timers', {
+        title: 'Rep Workout',
+        clocks: [{ name: 'Push-ups', type: 'reps', duration: 0, reps: 10, sets: 1 }],
+      });
+    });
+  });
+
   it('shows Saving... text while request is in progress', async () => {
     (apiClient.post as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();
