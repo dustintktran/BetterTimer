@@ -24,9 +24,9 @@ describe('ActiveTimer Integration', () => {
       id: 'timer-abc',
       title: 'Leg Flexibility Routine',
       clocks: [
-        { id: 'c1', name: 'Split Stretch', duration: 120, position: 1 },
-        { id: 'c2', name: 'Hamstring Hold', duration: 90, position: 2 },
-        { id: 'c3', name: 'Quad Stretch', duration: 60, position: 3 },
+        { id: 'c1', name: 'Split Stretch', duration: 120, position: 1, type: 'timed', reps: null, sets: 1 },
+        { id: 'c2', name: 'Hamstring Hold', duration: 90, position: 2, type: 'timed', reps: null, sets: 1 },
+        { id: 'c3', name: 'Quad Stretch', duration: 60, position: 3, type: 'timed', reps: null, sets: 1 },
       ],
     };
     (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockTimer });
