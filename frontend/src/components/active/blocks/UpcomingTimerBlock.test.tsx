@@ -11,6 +11,7 @@ describe('UpcomingTimerBlock', () => {
     type: 'timed' as const,
     reps: null,
     sets: 1,
+    restBetweenSets: 0,
   };
 
   it('renders the timer name', () => {

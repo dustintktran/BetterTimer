@@ -32,6 +32,7 @@ describe('ActiveTimer Integration', () => {
           type: 'timed',
           reps: null,
           sets: 1,
+          restBetweenSets: 0,
         },
         {
           id: 'c2',
@@ -41,6 +42,7 @@ describe('ActiveTimer Integration', () => {
           type: 'timed',
           reps: null,
           sets: 1,
+          restBetweenSets: 0,
         },
         {
           id: 'c3',
@@ -50,6 +52,7 @@ describe('ActiveTimer Integration', () => {
           type: 'timed',
           reps: null,
           sets: 1,
+          restBetweenSets: 0,
         },
       ],
     };

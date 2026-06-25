@@ -17,15 +17,28 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
   const timerComplete = timer == undefined;
   const [playBeep] = useSound(beep);
   const [currentSet, setCurrentSet] = useState(1);
+  const [isResting, setIsResting] = useState(false);
 
   const totalSets = timer?.sets ?? 1;
+  const restBetweenSets = timer?.restBetweenSets ?? 0;
+
+  const handleRestComplete = () => {
+    playBeep();
+    setIsResting(false);
+    setCurrentSet((prev) => prev + 1);
+  };
 
   const handleNextSet = () => {
     playBeep();
     if (currentSet < totalSets) {
-      setCurrentSet((prev) => prev + 1);
+      if (restBetweenSets > 0) {
+        setIsResting(true);
+      } else {
+        setCurrentSet((prev) => prev + 1);
+      }
     } else {
       setCurrentSet(1);
+      setIsResting(false);
       setTimers((previousTimers) => previousTimers.slice(1));
     }
   };
@@ -33,6 +46,7 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
   const handleSkip = () => {
     playBeep();
     setCurrentSet(1);
+    setIsResting(false);
     setTimers((previousTimers) => previousTimers.slice(1));
   };
 
@@ -42,21 +56,38 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
         <Typography margin={2}>Timers Complete!</Typography>
       ) : (
         <Stack flex={5}>
-          <Typography sx={styles.currentClockHeader}>{timer.name}</Typography>
-          {totalSets > 1 && (
-            <Typography sx={styles.setIndicator}>
-              Set {currentSet} of {totalSets}
-            </Typography>
-          )}
-          {timer.type === CLOCK_TYPE.REPS ? (
-            <RepCounter reps={timer.reps} handleNextTimer={handleNextSet} />
+          {isResting ? (
+            <>
+              <Typography sx={styles.currentClockHeader}>Rest</Typography>
+              <Typography sx={styles.setIndicator}>
+                Before set {currentSet + 1} of {totalSets}
+              </Typography>
+              <CurrentClock
+                key={`${timer.id}-rest-${currentSet}`}
+                initialSeconds={restBetweenSets}
+                handleNextTimer={handleRestComplete}
+                isPaused={isPaused}
+              />
+            </>
           ) : (
-            <CurrentClock
-              key={`${timer.id}-${currentSet}`}
-              initialSeconds={timer.duration}
-              handleNextTimer={handleNextSet}
-              isPaused={isPaused}
-            />
+            <>
+              <Typography sx={styles.currentClockHeader}>{timer.name}</Typography>
+              {totalSets > 1 && (
+                <Typography sx={styles.setIndicator}>
+                  Set {currentSet} of {totalSets}
+                </Typography>
+              )}
+              {timer.type === CLOCK_TYPE.REPS ? (
+                <RepCounter reps={timer.reps} handleNextTimer={handleNextSet} />
+              ) : (
+                <CurrentClock
+                  key={`${timer.id}-${currentSet}`}
+                  initialSeconds={timer.duration}
+                  handleNextTimer={handleNextSet}
+                  isPaused={isPaused}
+                />
+              )}
+            </>
           )}
           <Button
             variant='outlined'

@@ -100,7 +100,16 @@ describe('CreateTimer', () => {
     await waitFor(() => {
       expect(apiClient.post).toHaveBeenCalledWith('/timers', {
         title: 'My Routine',
-        clocks: [{ name: 'Stretch A', type: 'timed', duration: 60, reps: null, sets: 1 }],
+        clocks: [
+          {
+            name: 'Stretch A',
+            type: 'timed',
+            duration: 60,
+            reps: null,
+            sets: 1,
+            restBetweenSets: 0,
+          },
+        ],
       });
     });
 
@@ -182,9 +191,30 @@ describe('CreateTimer', () => {
     await waitFor(() => {
       expect(apiClient.post).toHaveBeenCalledWith('/timers', {
         title: 'Rep Workout',
-        clocks: [{ name: 'Push-ups', type: 'reps', duration: 0, reps: 10, sets: 1 }],
+        clocks: [
+          { name: 'Push-ups', type: 'reps', duration: 0, reps: 10, sets: 1, restBetweenSets: 0 },
+        ],
       });
     });
+  });
+
+  it('shows Rest (seconds) input when sets > 1', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    expect(screen.queryByLabelText('Rest (seconds)')).not.toBeInTheDocument();
+
+    const setsInput = screen.getByLabelText('Sets');
+    await user.clear(setsInput);
+    await user.type(setsInput, '3');
+
+    expect(screen.getByLabelText('Rest (seconds)')).toBeInTheDocument();
+  });
+
+  it('does not show Rest (seconds) input when sets is 1', () => {
+    renderComponent();
+    expect(screen.getByLabelText('Sets')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Rest (seconds)')).not.toBeInTheDocument();
   });
 
   it('shows Saving... text while request is in progress', async () => {
