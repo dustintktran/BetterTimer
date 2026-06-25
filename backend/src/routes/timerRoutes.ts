@@ -35,6 +35,9 @@ router.get('/:id', async (req, res) => {
         clockId: clocks.id,
         clockName: clocks.name,
         duration: clocks.duration,
+        clockType: clocks.type,
+        reps: clocks.reps,
+        sets: clocks.sets,
         position: timerClockSequence.position,
       })
       .from(timers)
@@ -54,6 +57,9 @@ router.get('/:id', async (req, res) => {
         id: row.clockId,
         name: row.clockName,
         duration: row.duration,
+        type: row.clockType,
+        reps: row.reps,
+        sets: row.sets,
         position: row.position
       })).filter(clock => clock.id !== null) // Handle cases where a timer has 0 clocks
     };
@@ -82,11 +88,14 @@ router.post('/', async (req, res) => {
       title,
     });
 
-    const clockRows = clockInputs.map((clock: { name: string; duration: number }) => ({
+    const clockRows = clockInputs.map((clock: { name: string; duration: number; type?: 'timed' | 'reps'; reps?: number; sets?: number }) => ({
       id: crypto.randomUUID(),
       userId: 1,
       name: clock.name,
-      duration: clock.duration,
+      duration: clock.type === 'reps' ? 0 : clock.duration,
+      type: clock.type || 'timed',
+      reps: clock.reps || null,
+      sets: clock.sets || 1,
     }));
 
     await db.insert(clocks).values(clockRows);
