@@ -13,11 +13,21 @@ export const TIMER_BLOCK_TYPE = {
 
 export type TimerBlockType = (typeof TIMER_BLOCK_TYPE)[keyof typeof TIMER_BLOCK_TYPE];
 
+export const CLOCK_TYPE = {
+  TIMED: 'timed',
+  REPS: 'reps',
+} as const;
+
+export type ClockType = (typeof CLOCK_TYPE)[keyof typeof CLOCK_TYPE];
+
 export type Clock = {
   id: string;
   name: string;
   duration: number;
   position: number;
+  type: ClockType;
+  reps: number | null;
+  sets: number;
 };
 
 export type TimerSummary = {
