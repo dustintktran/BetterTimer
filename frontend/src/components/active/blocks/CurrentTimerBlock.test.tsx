@@ -42,6 +42,7 @@ describe('CurrentTimerBlock', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByText('Split Stretch')).toBeInTheDocument();
@@ -57,6 +58,7 @@ describe('CurrentTimerBlock', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByText('Skip')).toBeInTheDocument();
@@ -71,6 +73,7 @@ describe('CurrentTimerBlock', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
@@ -88,6 +91,7 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 1,
+      restBetweenSets: 0,
     };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByTestId('rep-counter')).toHaveTextContent('15 reps');
@@ -103,6 +107,7 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 3,
+      restBetweenSets: 0,
     };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByText('Set 1 of 3')).toBeInTheDocument();
@@ -117,6 +122,7 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 1,
+      restBetweenSets: 0,
     };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.queryByText(/Set \d+ of/)).not.toBeInTheDocument();
@@ -131,6 +137,7 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 3,
+      restBetweenSets: 0,
     };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
@@ -149,6 +156,7 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 2,
+      restBetweenSets: 0,
     };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
@@ -169,12 +177,54 @@ describe('CurrentTimerBlock', () => {
       type: 'reps' as const,
       reps: 15,
       sets: 3,
+      restBetweenSets: 0,
     };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
 
     await user.click(screen.getByTestId('rep-counter'));
     expect(screen.getByText('Set 2 of 3')).toBeInTheDocument();
+
+    await user.click(screen.getByText('Skip'));
+    expect(mockSetTimers).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows rest countdown between sets when restBetweenSets > 0', async () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 3,
+      restBetweenSets: 30,
+    };
+    const user = userEvent.setup();
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(screen.getByText('Rest')).toBeInTheDocument();
+    expect(screen.getByText('Before set 2 of 3')).toBeInTheDocument();
+    expect(screen.getByTestId('current-clock')).toHaveTextContent('30s');
+  });
+
+  it('skip exits rest state and advances to next timer', async () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 3,
+      restBetweenSets: 30,
+    };
+    const user = userEvent.setup();
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(screen.getByText('Rest')).toBeInTheDocument();
 
     await user.click(screen.getByText('Skip'));
     expect(mockSetTimers).toHaveBeenCalledTimes(1);

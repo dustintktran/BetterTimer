@@ -20,6 +20,7 @@ interface ClockInput {
   duration: number;
   reps: number;
   sets: number;
+  restBetweenSets: number;
 }
 
 interface CreateTimerProps {
@@ -30,7 +31,7 @@ interface CreateTimerProps {
 const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
   const [title, setTitle] = useState('');
   const [clockInputs, setClockInputs] = useState<ClockInput[]>([
-    { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1 },
+    { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1, restBetweenSets: 0 },
   ]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +39,7 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
   const handleAddClock = () => {
     setClockInputs([
       ...clockInputs,
-      { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1 },
+      { name: '', type: CLOCK_TYPE.TIMED, duration: 60, reps: 10, sets: 1, restBetweenSets: 0 },
     ]);
   };
 
@@ -77,6 +78,7 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
           duration: c.type === CLOCK_TYPE.REPS ? 0 : c.duration,
           reps: c.type === CLOCK_TYPE.REPS ? c.reps : null,
           sets: c.sets,
+          restBetweenSets: c.sets > 1 ? c.restBetweenSets : 0,
         })),
       });
       setActiveTimer(response.data.id);
@@ -163,6 +165,18 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
                 sx={styles.setsInput}
                 slotProps={{ htmlInput: { min: 1 } }}
               />
+              {clock.sets > 1 && (
+                <TextField
+                  label='Rest (seconds)'
+                  type='number'
+                  value={clock.restBetweenSets}
+                  onChange={(e) =>
+                    handleClockChange(index, 'restBetweenSets', parseInt(e.target.value) || 0)
+                  }
+                  sx={styles.restInput}
+                  slotProps={{ htmlInput: { min: 0 } }}
+                />
+              )}
             </Stack>
           </Stack>
         ))}
@@ -237,6 +251,11 @@ const styles = {
     flex: 1,
     minWidth: 100,
     maxWidth: 120,
+  },
+  restInput: {
+    flex: 1,
+    minWidth: 140,
+    maxWidth: 160,
   },
   addButton: {
     marginBottom: 4,

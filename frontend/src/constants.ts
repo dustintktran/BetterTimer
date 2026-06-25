@@ -28,6 +28,7 @@ export type Clock = {
   type: ClockType;
   reps: number | null;
   sets: number;
+  restBetweenSets: number;
 };
 
 export type TimerSummary = {

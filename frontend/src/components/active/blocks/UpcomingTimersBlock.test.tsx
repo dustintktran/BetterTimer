@@ -24,6 +24,7 @@ describe('UpcomingTimersContainer', () => {
         type: 'timed' as const,
         reps: null,
         sets: 1,
+        restBetweenSets: 0,
       },
       {
         id: 'c4',
@@ -33,6 +34,7 @@ describe('UpcomingTimersContainer', () => {
         type: 'timed' as const,
         reps: null,
         sets: 1,
+        restBetweenSets: 0,
       },
     ];
     render(<UpcomingTimersContainer timers={timers} />);

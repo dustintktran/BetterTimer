@@ -37,6 +37,7 @@ describe('ActiveTimerBody', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     },
     {
       id: 'c2',
@@ -46,6 +47,7 @@ describe('ActiveTimerBody', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     },
     {
       id: 'c3',
@@ -55,6 +57,7 @@ describe('ActiveTimerBody', () => {
       type: 'timed' as const,
       reps: null,
       sets: 1,
+      restBetweenSets: 0,
     },
   ];
 
