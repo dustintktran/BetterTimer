@@ -23,6 +23,7 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
   const restBetweenSets = timer?.restBetweenSets ?? 0;
 
   const handleRestComplete = () => {
+    playBeep();
     setIsResting(false);
     setCurrentSet((prev) => prev + 1);
   };
