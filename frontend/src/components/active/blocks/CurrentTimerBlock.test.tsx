@@ -26,20 +26,44 @@ describe('CurrentTimerBlock', () => {
   });
 
   it('renders the timer name and clock when a timer is provided', () => {
-    const timer = { id: 'c1', name: 'Split Stretch', duration: 120, position: 1, type: 'timed' as const, reps: null, sets: 1 };
+    const timer = {
+      id: 'c1',
+      name: 'Split Stretch',
+      duration: 120,
+      position: 1,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByText('Split Stretch')).toBeInTheDocument();
     expect(screen.getByTestId('current-clock')).toHaveTextContent('120s');
   });
 
   it('renders a Skip button', () => {
-    const timer = { id: 'c1', name: 'Split Stretch', duration: 120, position: 1, type: 'timed' as const, reps: null, sets: 1 };
+    const timer = {
+      id: 'c1',
+      name: 'Split Stretch',
+      duration: 120,
+      position: 1,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    };
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
     expect(screen.getByText('Skip')).toBeInTheDocument();
   });
 
   it('calls setTimers to advance when Skip is clicked', async () => {
-    const timer = { id: 'c1', name: 'Split Stretch', duration: 120, position: 1, type: 'timed' as const, reps: null, sets: 1 };
+    const timer = {
+      id: 'c1',
+      name: 'Split Stretch',
+      duration: 120,
+      position: 1,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
 

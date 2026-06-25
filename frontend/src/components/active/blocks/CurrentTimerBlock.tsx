@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Box, Stack, Typography, Button } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { type Clock } from '../../../constants';
+import { CLOCK_TYPE, type Clock } from '../../../constants';
 import CurrentClock from './clocks/CurrentClock';
+import RepCounter from './RepCounter';
 import beep from '../../../assets/beep1.mp3';
 import useSound from 'use-sound';
 
@@ -14,10 +16,26 @@ interface CurrentTimerBlockProps {
 export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBlockProps) => {
   const timerComplete = timer == undefined;
   const [playBeep] = useSound(beep);
-  const handleNextTimer = () => {
-    setTimers((previousTimers) => previousTimers.slice(1));
+  const [currentSet, setCurrentSet] = useState(1);
+
+  const totalSets = timer?.sets ?? 1;
+
+  const handleNextSet = () => {
     playBeep();
+    if (currentSet < totalSets) {
+      setCurrentSet((prev) => prev + 1);
+    } else {
+      setCurrentSet(1);
+      setTimers((previousTimers) => previousTimers.slice(1));
+    }
   };
+
+  const handleSkip = () => {
+    playBeep();
+    setCurrentSet(1);
+    setTimers((previousTimers) => previousTimers.slice(1));
+  };
+
   return (
     <Box sx={styles.block}>
       {timerComplete ? (
@@ -25,17 +43,26 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
       ) : (
         <Stack flex={5}>
           <Typography sx={styles.currentClockHeader}>{timer.name}</Typography>
-          <CurrentClock
-            key={`{isPaused}`}
-            initialSeconds={timer.duration}
-            handleNextTimer={handleNextTimer}
-            isPaused={isPaused}
-          />
+          {totalSets > 1 && (
+            <Typography sx={styles.setIndicator}>
+              Set {currentSet} of {totalSets}
+            </Typography>
+          )}
+          {timer.type === CLOCK_TYPE.REPS ? (
+            <RepCounter reps={timer.reps} handleNextTimer={handleNextSet} />
+          ) : (
+            <CurrentClock
+              key={`${timer.id}-${currentSet}`}
+              initialSeconds={timer.duration}
+              handleNextTimer={handleNextSet}
+              isPaused={isPaused}
+            />
+          )}
           <Button
             variant='outlined'
             sx={styles.currentClockSkip}
             color='warning'
-            onClick={handleNextTimer}
+            onClick={handleSkip}
           >
             Skip
           </Button>
@@ -63,6 +90,12 @@ const styles = {
     textAlign: 'center',
     color: theme.palette.text.primary,
   }),
+  setIndicator: {
+    fontSize: '20px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    opacity: 0.7,
+  },
   currentClockDuration: {
     fontSize: '80px',
     fontWeight: 'bold',

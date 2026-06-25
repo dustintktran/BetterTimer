@@ -29,9 +29,33 @@ vi.mock('./blocks/UpcomingTimersBlock', () => ({
 
 describe('ActiveTimerBody', () => {
   const mockClocks = [
-    { id: 'c1', name: 'Stretch A', duration: 60, position: 1, type: 'timed' as const, reps: null, sets: 1 },
-    { id: 'c2', name: 'Stretch B', duration: 90, position: 2, type: 'timed' as const, reps: null, sets: 1 },
-    { id: 'c3', name: 'Stretch C', duration: 120, position: 3, type: 'timed' as const, reps: null, sets: 1 },
+    {
+      id: 'c1',
+      name: 'Stretch A',
+      duration: 60,
+      position: 1,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    },
+    {
+      id: 'c2',
+      name: 'Stretch B',
+      duration: 90,
+      position: 2,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    },
+    {
+      id: 'c3',
+      name: 'Stretch C',
+      duration: 120,
+      position: 3,
+      type: 'timed' as const,
+      reps: null,
+      sets: 1,
+    },
   ];
 
   beforeEach(() => {
