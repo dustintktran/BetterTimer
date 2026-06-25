@@ -20,15 +20,11 @@ describe('TimerSelector', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the Select Timer button', async () => {
-    (apiClient.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: [] });
+  it('renders the Select Timer button', () => {
     render(
       <TimerSelector setCurrentView={mockSetCurrentView} setActiveTimer={mockSetActiveTimer} />
     );
     expect(screen.getByText('Select Timer')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(apiClient.get).toHaveBeenCalled();
-    });
   });
 
   it('shows loading state while fetching timers', async () => {

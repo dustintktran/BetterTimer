@@ -1,6 +1,6 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material/styles';
-import { TIMER_BLOCK_TYPE, type Clock } from '../../../constants';
+import { CLOCK_TYPE, TIMER_BLOCK_TYPE, type Clock } from '../../../constants';
 import StaticClock from './clocks/StaticClock';
 
 interface UpcomingTimerBlockProps {
@@ -11,7 +11,14 @@ export const UpcomingTimerBlock = ({ timer }: UpcomingTimerBlockProps) => {
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.upcomingClockHeader}>{timer.name}</Typography>
-      <StaticClock type={TIMER_BLOCK_TYPE.UPCOMING} seconds={timer.duration} />
+      <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+        {timer.type === CLOCK_TYPE.REPS ? (
+          <Typography sx={styles.repsLabel}>{timer.reps} reps</Typography>
+        ) : (
+          <StaticClock type={TIMER_BLOCK_TYPE.UPCOMING} seconds={timer.duration} />
+        )}
+        {timer.sets > 1 && <Typography sx={styles.setsLabel}>&times;{timer.sets} sets</Typography>}
+      </Stack>
     </Box>
   );
 };
@@ -35,4 +42,14 @@ const styles = {
     padding: 0,
     color: theme.palette.text.primary,
   }),
+  repsLabel: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  setsLabel: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    opacity: 0.7,
+  },
 };
