@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import crypto from 'crypto';
-import { db } from '../index';
+import { db } from '../db/connection';
 import { timers, clocks, timerClockSequence} from '../db/schema';
 import { eq } from 'drizzle-orm';
 
