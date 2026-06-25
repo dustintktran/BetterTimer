@@ -9,6 +9,7 @@ export const clocks = mysqlTable('clocks', {
   type: mysqlEnum('type', ['timed', 'reps']).default('timed').notNull(),
   reps: int('reps'),
   sets: int('sets').default(1).notNull(),
+  restBetweenSets: int('rest_between_sets').default(0).notNull(),
 });
 
 // Timers Table
