@@ -27,4 +27,22 @@ describe('NextTimerBlock', () => {
     render(<NextTimerBlock timer={mockTimer} />);
     expect(screen.getByText('00:02:00')).toBeInTheDocument();
   });
+
+  it('renders reps label for rep-type clocks', () => {
+    const repTimer = { ...mockTimer, type: 'reps' as const, reps: 12, duration: 0 };
+    render(<NextTimerBlock timer={repTimer} />);
+    expect(screen.getByText('12 reps')).toBeInTheDocument();
+    expect(screen.queryByText('00:02:00')).not.toBeInTheDocument();
+  });
+
+  it('shows sets badge when sets > 1', () => {
+    const multiSetTimer = { ...mockTimer, sets: 3 };
+    render(<NextTimerBlock timer={multiSetTimer} />);
+    expect(screen.getByText('×3 sets')).toBeInTheDocument();
+  });
+
+  it('does not show sets badge when sets is 1', () => {
+    render(<NextTimerBlock timer={mockTimer} />);
+    expect(screen.queryByText(/sets/)).not.toBeInTheDocument();
+  });
 });

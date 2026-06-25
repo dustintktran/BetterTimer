@@ -13,6 +13,14 @@ vi.mock('./clocks/CurrentClock', () => ({
   ),
 }));
 
+vi.mock('./RepCounter', () => ({
+  default: ({ reps, handleNextTimer }: { reps: number; handleNextTimer: () => void }) => (
+    <div data-testid='rep-counter' onClick={handleNextTimer}>
+      {reps} reps
+    </div>
+  ),
+}));
+
 describe('CurrentTimerBlock', () => {
   const mockSetTimers = vi.fn();
 
@@ -66,6 +74,107 @@ describe('CurrentTimerBlock', () => {
     };
     const user = userEvent.setup();
     render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByText('Skip'));
+    expect(mockSetTimers).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders RepCounter for rep-type clocks', () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 1,
+    };
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+    expect(screen.getByTestId('rep-counter')).toHaveTextContent('15 reps');
+    expect(screen.queryByTestId('current-clock')).not.toBeInTheDocument();
+  });
+
+  it('shows set indicator when sets > 1', () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 3,
+    };
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+    expect(screen.getByText('Set 1 of 3')).toBeInTheDocument();
+  });
+
+  it('does not show set indicator when sets is 1', () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 1,
+    };
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+    expect(screen.queryByText(/Set \d+ of/)).not.toBeInTheDocument();
+  });
+
+  it('increments set counter on NEXT click without advancing timer', async () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 3,
+    };
+    const user = userEvent.setup();
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(screen.getByText('Set 2 of 3')).toBeInTheDocument();
+    expect(mockSetTimers).not.toHaveBeenCalled();
+  });
+
+  it('advances to next timer after final set', async () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 2,
+    };
+    const user = userEvent.setup();
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(screen.getByText('Set 2 of 2')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(mockSetTimers).toHaveBeenCalledTimes(1);
+  });
+
+  it('skip always advances to next timer regardless of current set', async () => {
+    const timer = {
+      id: 'c1',
+      name: 'Push-ups',
+      duration: 0,
+      position: 1,
+      type: 'reps' as const,
+      reps: 15,
+      sets: 3,
+    };
+    const user = userEvent.setup();
+    render(<CurrentTimerBlock timer={timer} setTimers={mockSetTimers} isPaused={true} />);
+
+    await user.click(screen.getByTestId('rep-counter'));
+    expect(screen.getByText('Set 2 of 3')).toBeInTheDocument();
 
     await user.click(screen.getByText('Skip'));
     expect(mockSetTimers).toHaveBeenCalledTimes(1);

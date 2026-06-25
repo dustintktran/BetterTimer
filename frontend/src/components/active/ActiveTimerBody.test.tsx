@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ActiveTimerBody from './ActiveTimerBody';
@@ -122,5 +122,21 @@ describe('ActiveTimerBody', () => {
 
     fireEvent.keyDown(window, { code: 'Space' });
     expect(screen.getByTestId('current-timer-block')).toHaveTextContent('paused');
+  });
+
+  it('shows elapsed timer after START is clicked and time passes', () => {
+    vi.useFakeTimers();
+    render(<ActiveTimerBody initialTimers={mockClocks} />);
+
+    expect(screen.queryByText(/Total:/)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('START'));
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(screen.getByText('Total: 00:00:03')).toBeInTheDocument();
+    vi.useRealTimers();
   });
 });
