@@ -43,6 +43,12 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
     }
   };
 
+  const handleSkipRest = () => {
+    playBeep();
+    setIsResting(false);
+    setCurrentSet((prev) => prev + 1);
+  };
+
   const handleSkip = () => {
     playBeep();
     setCurrentSet(1);
@@ -68,6 +74,14 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
                 handleNextTimer={handleRestComplete}
                 isPaused={isPaused}
               />
+              <Button
+                variant='outlined'
+                sx={styles.currentClockSkip}
+                color='warning'
+                onClick={handleSkipRest}
+              >
+                Skip Rest
+              </Button>
             </>
           ) : (
             <>
@@ -87,16 +101,16 @@ export const CurrentTimerBlock = ({ timer, setTimers, isPaused }: CurrentTimerBl
                   isPaused={isPaused}
                 />
               )}
+              <Button
+                variant='outlined'
+                sx={styles.currentClockSkip}
+                color='warning'
+                onClick={handleSkip}
+              >
+                Skip
+              </Button>
             </>
           )}
-          <Button
-            variant='outlined'
-            sx={styles.currentClockSkip}
-            color='warning'
-            onClick={handleSkip}
-          >
-            Skip
-          </Button>
         </Stack>
       )}
     </Box>

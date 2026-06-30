@@ -209,7 +209,7 @@ describe('CurrentTimerBlock', () => {
     expect(screen.getByTestId('current-clock')).toHaveTextContent('30s');
   });
 
-  it('skip exits rest state and advances to next timer', async () => {
+  it('Skip Rest skips rest and advances to next set', async () => {
     const timer = {
       id: 'c1',
       name: 'Push-ups',
@@ -225,8 +225,11 @@ describe('CurrentTimerBlock', () => {
 
     await user.click(screen.getByTestId('rep-counter'));
     expect(screen.getByText('Rest')).toBeInTheDocument();
+    expect(screen.getByText('Skip Rest')).toBeInTheDocument();
 
-    await user.click(screen.getByText('Skip'));
-    expect(mockSetTimers).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByText('Skip Rest'));
+    expect(screen.getByText('Set 2 of 3')).toBeInTheDocument();
+    expect(screen.getByText('Push-ups')).toBeInTheDocument();
+    expect(mockSetTimers).not.toHaveBeenCalled();
   });
 });
