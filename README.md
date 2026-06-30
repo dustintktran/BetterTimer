@@ -1,23 +1,28 @@
 # BetterTimer
 
-A web-based timer app for running a single timer or a sequence of timers in succession. Built for workout routines where multiple exercises run back-to-back with different durations (e.g. stretching sequences).
+A web-based timer app for running a single timer or a sequence of timers in succession. Built for workout routines where multiple exercises run back-to-back with different durations (e.g. stretching sequences, strength circuits, HIIT).
 
 ## Features
 
-- Run ordered sequences of named timers with individual durations
-- Live countdown with progress bar for the current timer
-- Preview of the next and upcoming timers in the queue
-- Skip the current timer or pause/resume with spacebar
-- Audio beep notification when each timer completes
-- Three color themes: Nordic, Desert, and Midnight
-- Select from saved timer routines via dropdown
+- **Timed clocks** — countdown timers with a live progress bar
+- **Rep-based clocks** — display a rep count with a NEXT button (no countdown)
+- **Multi-set support** — clocks can repeat for multiple sets with a "Set X of Y" indicator
+- **Rest between sets** — configurable rest countdown between each set
+- **Create timer** — build custom routines with a form (name, type, duration/reps, sets, rest)
+- **Overall workout timer** — elapsed stopwatch showing total workout time
+- **Skip controls** — skip the current clock or skip just the rest period
+- **Pause/resume** — spacebar shortcut to toggle pause
+- **Audio notifications** — beep on timer completion, rest start, and rest end
+- **Three color themes** — Nordic, Desert, and Midnight
+- **Select saved routines** — dropdown fetches timer list from the API
 
 ## Tech Stack
 
-- **Frontend:** React 19 + TypeScript + Vite + Material UI (MUI 7)
-- **Backend:** Node.js + Express 5 + TypeScript + Drizzle ORM
+- **Frontend:** React 19 + TypeScript + Vite 7 + Material UI (MUI 7)
+- **Backend:** Node.js 20 + Express 5 + TypeScript + Drizzle ORM
 - **Database:** MySQL 8.0
-- **Infrastructure:** Docker Compose
+- **Infrastructure:** Docker Compose (MySQL + backend containers; frontend runs on host)
+- **Testing:** Vitest + React Testing Library (frontend), Vitest + Supertest (backend)
 
 ## Prerequisites
 
@@ -43,23 +48,24 @@ This starts:
 - **MySQL** on port `3306`
 - **Backend API** on port `5000`
 
-### 3. Run database migrations and seed data
+The backend automatically runs Drizzle migrations on startup (with retry logic for MySQL readiness), so the database schema is created automatically.
 
-Once the containers are running, install backend dependencies, apply the Drizzle migrations, and seed the sample timer routines:
+### 3. Seed sample data
+
+Once the containers are running:
 
 ```bash
 cd backend
 npm install
-DB_HOST=localhost DB_USER=root DB_PASSWORD=password DB_DATABASE=better_timer_db npm run db:migrate
-npm run db:seed
+DB_HOST=localhost npm run db:seed
 cd ..
 ```
 
-The seed script (`npm run db:seed`) inserts two sample routines:
-- **Leg Flexibility Routine** — 11 stretches (splits, calves, quads, hamstrings, etc.)
-- **Upper Body Flexibility Routine** — 9 stretches (chest, triceps, cat, downward dog, etc.)
-
-> **Note:** `db:migrate` and `db:seed` require the database environment variables (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_DATABASE`). The defaults in the seed script point to `localhost`, so the above works when MySQL is running via Docker Compose. You can also seed via raw SQL with `npm run db:seed:sql` (requires the Docker container to be running).
+The seed script inserts four sample routines:
+- **Leg Flexibility Routine** — 11 timed stretches (splits, calves, quads, hamstrings, etc.)
+- **Upper Body Flexibility Routine** — 9 timed stretches (chest, triceps, cat, downward dog, etc.)
+- **Strength Circuit** — mixed rep/timed exercises with multi-set support (Push-ups 15x3, Squats 20x3, Lunges 12x2, Plank 60sx3)
+- **Full Body HIIT** — rep-based exercises with rest between sets (Burpees 10x3, Jump Squats 15x3, Mountain Climbers 20x2, etc.)
 
 ### 4. Start the frontend
 
@@ -70,6 +76,83 @@ npm run dev
 ```
 
 The frontend dev server starts at **http://localhost:5173**.
+
+### Running backend locally (without Docker for backend)
+
+If you want to run only MySQL in Docker and the backend locally:
+
+```bash
+# Start just the database container
+docker compose up -d db
+
+# Run the backend locally
+cd backend
+DB_HOST=localhost npm run dev
+```
+
+## API Endpoints
+
+### `GET /api/timers`
+
+Returns all saved timers.
+
+**Response:**
+```json
+[
+  { "id": "uuid", "title": "Leg Flexibility Routine", "userId": 1 }
+]
+```
+
+### `GET /api/timers/:id`
+
+Returns a timer with its ordered clocks.
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "title": "Strength Circuit",
+  "clocks": [
+    {
+      "id": "uuid",
+      "name": "Push-ups",
+      "duration": 0,
+      "type": "reps",
+      "reps": 15,
+      "sets": 3,
+      "restBetweenSets": 30,
+      "position": 1
+    },
+    {
+      "id": "uuid",
+      "name": "Plank",
+      "duration": 60,
+      "type": "timed",
+      "reps": null,
+      "sets": 3,
+      "restBetweenSets": 15,
+      "position": 2
+    }
+  ]
+}
+```
+
+### `POST /api/timers`
+
+Creates a new timer with clocks.
+
+**Request body:**
+```json
+{
+  "title": "My Workout",
+  "clocks": [
+    { "name": "Push-ups", "type": "reps", "duration": 0, "reps": 15, "sets": 3, "restBetweenSets": 30 },
+    { "name": "Plank", "type": "timed", "duration": 60, "sets": 2, "restBetweenSets": 15 }
+  ]
+}
+```
+
+**Response:** `201 Created` with the created timer and clocks.
 
 ## Development
 
@@ -94,6 +177,7 @@ The frontend dev server starts at **http://localhost:5173**.
 | `npm run db:migrate`  | Apply Drizzle migrations                     |
 | `npm run db:seed`     | Seed sample routines via TypeScript + Drizzle |
 | `npm run db:seed:sql` | Seed via raw SQL through Docker exec          |
+| `npm run test`        | Run backend tests with Vitest                |
 
 ### Docker
 
@@ -108,36 +192,51 @@ The frontend dev server starts at **http://localhost:5173**.
 
 | Variable      | Description         | Default              |
 | ------------- | ------------------- | -------------------- |
-| `DB_HOST`     | MySQL host          | `db` (Docker) / `localhost` (seed) |
+| `DB_HOST`     | MySQL host          | `db` (Docker) / `localhost` (local) |
 | `DB_USER`     | MySQL user          | `root`               |
 | `DB_PASSWORD` | MySQL password      | `password`           |
 | `DB_DATABASE` | Database name       | `better_timer_db`    |
 
-### Frontend
+## Testing
 
-| Variable       | Description               | Default                        |
-| -------------- | ------------------------- | ------------------------------ |
-| `VITE_API_URL` | Backend API base URL      | `http://localhost:5000/api`    |
+- **Frontend:** 90 tests using Vitest + React Testing Library (jsdom). Run with `npm run test` from `frontend/`.
+- **Backend:** 16 tests using Vitest + Supertest. Run with `npm run test` from `backend/`.
+- Test files are co-located with source: `*.test.tsx` / `*.test.ts` next to the component or route.
 
 ## Project Structure
 
 ```
 BetterTimer/
 ├── docker-compose.yml
-├── package.json              # Root (Prettier + ESLint config deps)
-├── frontend/                 # React + Vite app
+├── package.json                 # Root (Prettier + ESLint config deps)
+├── frontend/                    # React + Vite app
 │   ├── src/
-│   │   ├── components/       # UI components (global, active, create)
-│   │   ├── api/              # Axios API client
-│   │   ├── helpers/          # Utility functions
-│   │   ├── styles/           # Shared styled components
-│   │   └── assets/           # Audio files, images
+│   │   ├── App.tsx              # Root component (theme + view state)
+│   │   ├── constants.ts         # Shared types (Clock, Timer, ClockType)
+│   │   ├── theme.ts             # MUI themes: Nordic, Desert, Midnight
+│   │   ├── api/
+│   │   │   └── apiClient.ts     # Axios instance -> http://localhost:5000/api
+│   │   ├── helpers/
+│   │   │   └── formatTime.ts    # HH:MM:SS formatter
+│   │   ├── assets/
+│   │   │   └── beep1.mp3        # Audio played on timer events
+│   │   └── components/
+│   │       ├── global/          # GlobalHeader, PageManager, ThemeSelector, TimerSelector
+│   │       ├── create/          # CreateTimer (form with type toggle, reps, sets, rest)
+│   │       └── active/          # ActiveTimer, ActiveTimerBody, ActiveTimerHeader
+│   │           └── blocks/      # CurrentTimerBlock, NextTimerBlock, UpcomingTimerBlock(s)
+│   │               ├── RepCounter.tsx        # Rep display + NEXT button
+│   │               └── clocks/              # CurrentClock (countdown), StaticClock (preview)
 │   └── ...
-├── backend/                  # Express API server
+├── backend/                     # Express API server
 │   ├── src/
-│   │   ├── db/               # Drizzle schema
-│   │   ├── routes/           # API route handlers
-│   │   └── seed.ts           # TypeScript seed script
-│   ├── migrations/           # Drizzle SQL migrations
-│   └── seeds/                # SQL seed files (legacy)
+│   │   ├── index.ts             # Server entry, auto-migration with retry logic
+│   │   ├── app.ts               # Express app setup (CORS, routes)
+│   │   ├── db/
+│   │   │   ├── schema.ts        # Drizzle schema: clocks, timers, timer_clock_sequence
+│   │   │   └── connection.ts    # MySQL connection pool
+│   │   ├── routes/
+│   │   │   └── timerRoutes.ts   # GET /api/timers, GET /api/timers/:id, POST /api/timers
+│   │   └── seed.ts              # TypeScript seed script
+│   └── migrations/              # Drizzle SQL migrations
 ```
