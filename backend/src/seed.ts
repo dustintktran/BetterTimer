@@ -40,13 +40,11 @@ const clockRows = [
   { id: 'c202-uuid', userId: 1, name: 'Plank', duration: 60, type: 'timed' as const, reps: null, sets: 3, restBetweenSets: 15 },
   { id: 'c203-uuid', userId: 1, name: 'Squats', duration: 0, type: 'reps' as const, reps: 20, sets: 3, restBetweenSets: 30 },
   { id: 'c204-uuid', userId: 1, name: 'Lunges', duration: 0, type: 'reps' as const, reps: 12, sets: 2, restBetweenSets: 20 },
-  { id: 'c205-uuid', userId: 1, name: 'Rest', duration: 30, type: 'timed' as const, reps: null, sets: 1 },
   { id: 'c301-uuid', userId: 1, name: 'Burpees', duration: 0, type: 'reps' as const, reps: 10, sets: 3, restBetweenSets: 30 },
   { id: 'c302-uuid', userId: 1, name: 'Jump Squats', duration: 0, type: 'reps' as const, reps: 15, sets: 3, restBetweenSets: 30 },
   { id: 'c303-uuid', userId: 1, name: 'Mountain Climbers', duration: 0, type: 'reps' as const, reps: 20, sets: 2, restBetweenSets: 20 },
   { id: 'c304-uuid', userId: 1, name: 'Bicycle Crunches', duration: 0, type: 'reps' as const, reps: 25, sets: 2, restBetweenSets: 20 },
   { id: 'c305-uuid', userId: 1, name: 'High Knees', duration: 45, type: 'timed' as const, reps: null, sets: 2, restBetweenSets: 15 },
-  { id: 'c306-uuid', userId: 1, name: 'Active Rest', duration: 30, type: 'timed' as const, reps: null, sets: 1 },
 ];
 
 const legSequence = [
@@ -60,12 +58,11 @@ const upperSequence = [
 ];
 
 const strengthSequence = [
-  'c201-uuid', 'c205-uuid', 'c203-uuid', 'c205-uuid', 'c204-uuid', 'c205-uuid', 'c202-uuid',
+  'c201-uuid', 'c203-uuid', 'c204-uuid', 'c202-uuid',
 ];
 
 const fullbodySequence = [
-  'c301-uuid', 'c306-uuid', 'c302-uuid', 'c306-uuid',
-  'c303-uuid', 'c306-uuid', 'c304-uuid', 'c306-uuid', 'c305-uuid',
+  'c301-uuid', 'c302-uuid', 'c303-uuid', 'c304-uuid', 'c305-uuid',
 ];
 
 const sequenceRows = [
