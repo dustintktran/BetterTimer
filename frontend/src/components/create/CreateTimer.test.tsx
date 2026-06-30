@@ -27,8 +27,8 @@ describe('CreateTimer', () => {
     renderComponent();
     expect(screen.getByText('Create Timer')).toBeInTheDocument();
     expect(screen.getByLabelText('Timer Title')).toBeInTheDocument();
-    expect(screen.getByLabelText('Clock Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Duration (seconds)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Duration (s)')).toBeInTheDocument();
     expect(screen.getByText('Save Timer')).toBeInTheDocument();
   });
 
@@ -38,7 +38,7 @@ describe('CreateTimer', () => {
 
     await user.click(screen.getByText('Add Clock'));
 
-    const clockNameInputs = screen.getAllByLabelText('Clock Name');
+    const clockNameInputs = screen.getAllByLabelText('Name');
     expect(clockNameInputs).toHaveLength(2);
   });
 
@@ -47,12 +47,12 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.click(screen.getByText('Add Clock'));
-    expect(screen.getAllByLabelText('Clock Name')).toHaveLength(2);
+    expect(screen.getAllByLabelText('Name')).toHaveLength(2);
 
     const deleteButtons = screen.getAllByTestId('DeleteIcon');
     await user.click(deleteButtons[0]);
 
-    expect(screen.getAllByLabelText('Clock Name')).toHaveLength(1);
+    expect(screen.getAllByLabelText('Name')).toHaveLength(1);
   });
 
   it('disables delete button when only one clock remains', () => {
@@ -92,8 +92,8 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.type(screen.getByLabelText('Timer Title'), 'My Routine');
-    await user.clear(screen.getByLabelText('Clock Name'));
-    await user.type(screen.getByLabelText('Clock Name'), 'Stretch A');
+    await user.clear(screen.getByLabelText('Name'));
+    await user.type(screen.getByLabelText('Name'), 'Stretch A');
 
     await user.click(screen.getByText('Save Timer'));
 
@@ -125,8 +125,8 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.type(screen.getByLabelText('Timer Title'), 'My Routine');
-    await user.clear(screen.getByLabelText('Clock Name'));
-    await user.type(screen.getByLabelText('Clock Name'), 'Stretch A');
+    await user.clear(screen.getByLabelText('Name'));
+    await user.type(screen.getByLabelText('Name'), 'Stretch A');
 
     await user.click(screen.getByText('Save Timer'));
 
@@ -141,8 +141,8 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.type(screen.getByLabelText('Timer Title'), 'My Routine');
-    await user.clear(screen.getByLabelText('Clock Name'));
-    await user.type(screen.getByLabelText('Clock Name'), 'Stretch A');
+    await user.clear(screen.getByLabelText('Name'));
+    await user.type(screen.getByLabelText('Name'), 'Stretch A');
 
     await user.click(screen.getByText('Save Timer'));
 
@@ -155,7 +155,7 @@ describe('CreateTimer', () => {
     renderComponent();
     expect(screen.getByText('Timed')).toBeInTheDocument();
     expect(screen.getByText('Reps')).toBeInTheDocument();
-    expect(screen.getByLabelText('Duration (seconds)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Duration (s)')).toBeInTheDocument();
     expect(screen.queryByLabelText('Reps')).not.toBeInTheDocument();
   });
 
@@ -166,7 +166,7 @@ describe('CreateTimer', () => {
     await user.click(screen.getByText('Reps'));
 
     expect(screen.getByLabelText('Reps')).toBeInTheDocument();
-    expect(screen.queryByLabelText('Duration (seconds)')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Duration (s)')).not.toBeInTheDocument();
   });
 
   it('always shows Sets input', () => {
@@ -182,8 +182,8 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.type(screen.getByLabelText('Timer Title'), 'Rep Workout');
-    await user.clear(screen.getByLabelText('Clock Name'));
-    await user.type(screen.getByLabelText('Clock Name'), 'Push-ups');
+    await user.clear(screen.getByLabelText('Name'));
+    await user.type(screen.getByLabelText('Name'), 'Push-ups');
     await user.click(screen.getByText('Reps'));
 
     await user.click(screen.getByText('Save Timer'));
@@ -202,19 +202,19 @@ describe('CreateTimer', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    expect(screen.queryByLabelText('Rest (seconds)')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Rest (s)')).not.toBeInTheDocument();
 
     const setsInput = screen.getByLabelText('Sets');
     await user.clear(setsInput);
     await user.type(setsInput, '3');
 
-    expect(screen.getByLabelText('Rest (seconds)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Rest (s)')).toBeInTheDocument();
   });
 
   it('does not show Rest (seconds) input when sets is 1', () => {
     renderComponent();
     expect(screen.getByLabelText('Sets')).toBeInTheDocument();
-    expect(screen.queryByLabelText('Rest (seconds)')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Rest (s)')).not.toBeInTheDocument();
   });
 
   it('shows Saving... text while request is in progress', async () => {
@@ -223,8 +223,8 @@ describe('CreateTimer', () => {
     renderComponent();
 
     await user.type(screen.getByLabelText('Timer Title'), 'My Routine');
-    await user.clear(screen.getByLabelText('Clock Name'));
-    await user.type(screen.getByLabelText('Clock Name'), 'Stretch A');
+    await user.clear(screen.getByLabelText('Name'));
+    await user.type(screen.getByLabelText('Name'), 'Stretch A');
 
     await user.click(screen.getByText('Save Timer'));
 

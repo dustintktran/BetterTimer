@@ -105,79 +105,81 @@ const CreateTimer = ({ setCurrentView, setActiveTimer }: CreateTimerProps) => {
 
       <Typography sx={styles.subheading}>Clocks</Typography>
 
-      <Stack spacing={4} sx={styles.clockList}>
+      <Stack spacing={2} sx={styles.clockList}>
         {clockInputs.map((clock, index) => (
-          <Stack key={index} spacing={2}>
-            <Stack direction='row' spacing={4} alignItems='center'>
-              <Typography sx={styles.clockIndex}>{index + 1}.</Typography>
+          <Stack key={index} direction='row' spacing={1} alignItems='center'>
+            <Typography sx={styles.clockIndex}>{index + 1}.</Typography>
+            <TextField
+              label='Name'
+              value={clock.name}
+              onChange={(e) => handleClockChange(index, 'name', e.target.value)}
+              sx={styles.clockNameInput}
+              size='small'
+            />
+            <ToggleButtonGroup
+              value={clock.type}
+              exclusive
+              onChange={(_, val) => {
+                if (val) handleClockChange(index, 'type', val);
+              }}
+              size='small'
+            >
+              <ToggleButton value={CLOCK_TYPE.TIMED}>Timed</ToggleButton>
+              <ToggleButton value={CLOCK_TYPE.REPS}>Reps</ToggleButton>
+            </ToggleButtonGroup>
+            {clock.type === CLOCK_TYPE.TIMED ? (
               <TextField
-                label='Clock Name'
-                value={clock.name}
-                onChange={(e) => handleClockChange(index, 'name', e.target.value)}
-                sx={styles.clockNameInput}
-              />
-              <ToggleButtonGroup
-                value={clock.type}
-                exclusive
-                onChange={(_, val) => {
-                  if (val) handleClockChange(index, 'type', val);
-                }}
-                size='small'
-              >
-                <ToggleButton value={CLOCK_TYPE.TIMED}>Timed</ToggleButton>
-                <ToggleButton value={CLOCK_TYPE.REPS}>Reps</ToggleButton>
-              </ToggleButtonGroup>
-              <IconButton
-                onClick={() => handleRemoveClock(index)}
-                disabled={clockInputs.length === 1}
-                color='error'
-              >
-                <Delete />
-              </IconButton>
-            </Stack>
-            <Stack direction='row' spacing={4} sx={{ marginLeft: 5 }}>
-              {clock.type === CLOCK_TYPE.TIMED ? (
-                <TextField
-                  label='Duration (seconds)'
-                  type='number'
-                  value={clock.duration}
-                  onChange={(e) =>
-                    handleClockChange(index, 'duration', parseInt(e.target.value) || 0)
-                  }
-                  sx={styles.durationInput}
-                  slotProps={{ htmlInput: { min: 1 } }}
-                />
-              ) : (
-                <TextField
-                  label='Reps'
-                  type='number'
-                  value={clock.reps}
-                  onChange={(e) => handleClockChange(index, 'reps', parseInt(e.target.value) || 0)}
-                  sx={styles.repsInput}
-                  slotProps={{ htmlInput: { min: 1 } }}
-                />
-              )}
-              <TextField
-                label='Sets'
+                label='Duration (s)'
                 type='number'
-                value={clock.sets}
-                onChange={(e) => handleClockChange(index, 'sets', parseInt(e.target.value) || 1)}
-                sx={styles.setsInput}
+                value={clock.duration}
+                onChange={(e) =>
+                  handleClockChange(index, 'duration', parseInt(e.target.value) || 0)
+                }
+                sx={styles.durationInput}
+                size='small'
                 slotProps={{ htmlInput: { min: 1 } }}
               />
-              {clock.sets > 1 && (
-                <TextField
-                  label='Rest (seconds)'
-                  type='number'
-                  value={clock.restBetweenSets}
-                  onChange={(e) =>
-                    handleClockChange(index, 'restBetweenSets', parseInt(e.target.value) || 0)
-                  }
-                  sx={styles.restInput}
-                  slotProps={{ htmlInput: { min: 0 } }}
-                />
-              )}
-            </Stack>
+            ) : (
+              <TextField
+                label='Reps'
+                type='number'
+                value={clock.reps}
+                onChange={(e) => handleClockChange(index, 'reps', parseInt(e.target.value) || 0)}
+                sx={styles.repsInput}
+                size='small'
+                slotProps={{ htmlInput: { min: 1 } }}
+              />
+            )}
+            <TextField
+              label='Sets'
+              type='number'
+              value={clock.sets}
+              onChange={(e) => handleClockChange(index, 'sets', parseInt(e.target.value) || 1)}
+              sx={styles.setsInput}
+              size='small'
+              slotProps={{ htmlInput: { min: 1 } }}
+            />
+            {clock.sets > 1 && (
+              <TextField
+                label='Rest (s)'
+                type='number'
+                value={clock.restBetweenSets}
+                onChange={(e) =>
+                  handleClockChange(index, 'restBetweenSets', parseInt(e.target.value) || 0)
+                }
+                sx={styles.restInput}
+                size='small'
+                slotProps={{ htmlInput: { min: 0 } }}
+              />
+            )}
+            <IconButton
+              onClick={() => handleRemoveClock(index)}
+              disabled={clockInputs.length === 1}
+              color='error'
+              size='small'
+            >
+              <Delete />
+            </IconButton>
           </Stack>
         ))}
       </Stack>
@@ -211,51 +213,50 @@ export default CreateTimer;
 
 const styles = {
   container: (theme: Theme) => ({
-    padding: theme.spacing(8),
-    maxWidth: 700,
+    padding: theme.spacing(4),
+    maxWidth: 1000,
     margin: '0 auto',
   }),
   heading: {
     fontSize: '28px',
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   titleInput: {
-    marginBottom: 8,
+    marginBottom: 4,
   },
   subheading: {
     fontSize: '20px',
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   clockList: {
-    marginBottom: 8,
+    marginBottom: 4,
   },
   clockIndex: {
-    fontSize: '16px',
+    fontSize: '14px',
     fontWeight: 'bold',
-    minWidth: 24,
+    minWidth: 20,
   },
   clockNameInput: {
     flex: 2,
-  },
-  durationInput: {
-    flex: 1,
-    minWidth: 140,
-  },
-  repsInput: {
-    flex: 1,
     minWidth: 120,
   },
+  durationInput: {
+    width: 110,
+    minWidth: 110,
+  },
+  repsInput: {
+    width: 80,
+    minWidth: 80,
+  },
   setsInput: {
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 120,
+    width: 70,
+    minWidth: 70,
   },
   restInput: {
-    flex: 1,
-    minWidth: 140,
-    maxWidth: 160,
+    width: 90,
+    minWidth: 90,
   },
   addButton: {
     marginBottom: 4,
@@ -266,7 +267,7 @@ const styles = {
   saveButtonContainer: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 8,
   },
   saveButton: {
     paddingY: 4,
